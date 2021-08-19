@@ -1,0 +1,16 @@
+problem,num_nodes,num_edges,traffic_seed,tm_model,scale_factor,num_commodities,total_demand,algo,split_method,split_fraction,num_subproblems,num_paths,edge_disjoint,dist_metric,objective,obj_val,runtime
+Cogentco.graphml,197,486,1229219359,gravity,64.0,38610,76765.140625,pop,tailored,0,4,4,True,inv-cap,total_flow,36126.65768643574,0.7879171371459961
+Cogentco.graphml,197,486,1229219359,gravity,64.0,38610,76765.140625,pop,skewed,0,4,4,True,inv-cap,total_flow,25797.32948704809,0.4715430736541748
+Cogentco.graphml,197,486,1229219359,gravity,64.0,38610,76765.140625,pop,random,0,4,4,True,inv-cap,total_flow,36046.3627157839,0.7979259490966797
+Cogentco.graphml,197,486,1229219359,gravity,64.0,38610,76765.140625,pop,means,0,4,4,True,inv-cap,total_flow,36137.86053766776,0.7703800201416016
+Cogentco.graphml,197,486,1229219359,gravity,64.0,38610,76765.140625,pop,tailored,0,8,4,True,inv-cap,total_flow,35944.19092832879,0.34427309036254883
+Cogentco.graphml,197,486,1229219359,gravity,64.0,38610,76765.140625,pop,skewed,0,8,4,True,inv-cap,total_flow,19585.441655427217,0.29987215995788574
+Cogentco.graphml,197,486,1229219359,gravity,64.0,38610,76765.140625,pop,random,0,8,4,True,inv-cap,total_flow,35819.43609116627,0.3798649311065674
+Cogentco.graphml,197,486,1229219359,gravity,64.0,38610,76765.140625,pop,means,0,8,4,True,inv-cap,total_flow,35953.03567395695,0.3257749080657959
+Cogentco.graphml,197,486,1229219359,gravity,64.0,38610,76765.140625,pop,tailored,0,16,4,True,inv-cap,total_flow,35741.02114845095,0.18310189247131348
+Cogentco.graphml,197,486,1229219359,gravity,64.0,38610,76765.140625,pop,skewed,0,16,4,True,inv-cap,total_flow,13763.259397700429,0.10731291770935059
+Cogentco.graphml,197,486,1229219359,gravity,64.0,38610,76765.140625,pop,random,0,16,4,True,inv-cap,total_flow,35301.480562245226,0.12216806411743164
+Cogentco.graphml,197,486,1229219359,gravity,64.0,38610,76765.140625,pop,means,0,16,4,True,inv-cap,total_flow,35548.57485229139,0.13523197174072266
+Cogentco.graphml,197,486,1229219359,gravity,64.0,38610,76765.140625,pop,cluster,0,4,4,True,inv-cap,total_flow,36018.992473970226,0.8878488540649414
+Cogentco.graphml,197,486,1229219359,gravity,64.0,38610,76765.140625,pop,cluster,0,8,4,True,inv-cap,total_flow,35851.279780223296,0.3347470760345459
+Cogentco.graphml,197,486,1229219359,gravity,64.0,38610,76765.140625,pop,cluster,0,16,4,True,inv-cap,total_flow,35353.60029823131,0.15266799926757812

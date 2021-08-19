@@ -1,0 +1,2 @@
+problem,num_nodes,num_edges,traffic_seed,scale_factor,tm_model,num_commodities,total_demand,algo,num_paths,edge_disjoint,dist_metric,objective,obj_val,runtime
+Kdl.graphml,754,1790,1710674203,16.0,gravity,567745,24000.064453125,cspf,4,True,inv-cap,total_flow,20306.308376549627,7.179495

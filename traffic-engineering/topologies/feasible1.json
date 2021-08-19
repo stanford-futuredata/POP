@@ -1,0 +1,24 @@
+{
+"directed": true, 
+"multigraph": false, 
+"graph": {}, 
+"nodes": [
+	{"label": "0", "pos": [-2, 2], "id": 0}, 
+	{"label": "1", "pos": [-2, -2], "id": 1}, 
+	{"label": "2", "pos": [-1, 0], "id": 2}, 
+	{"label": "3", "pos": [0, 0], "id": 3}, 
+	{"label": "4", "pos": [1, 0], "id": 4}, 
+	{"label": "5", "pos": [2, 0], "id": 5},
+	{"label": "6", "pos": [3, 2], "id": 6}, 
+	{"label": "7", "pos": [3, -2], "id": 7}
+	], 
+"links": [
+	{"source": 0, "target": 2, "capacity": 1}, 
+	{"source": 1, "target": 2, "capacity": 5}, 
+	{"source": 2, "target": 3}, 
+	{"source": 3, "target": 4}, 
+	{"source": 4, "target": 5}, 
+	{"source": 5, "target": 6, "capacity": 5}, 
+	{"source": 5, "target": 7, "capacity": 1}
+	]
+}

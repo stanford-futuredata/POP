@@ -1,0 +1,6 @@
+# Auto-generated gRPC files.
+scheduler/runtime/rpc_stubs
+
+# Python.
+*.ipynb_checkpoints
+*.pyc

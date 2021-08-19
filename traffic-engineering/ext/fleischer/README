@@ -1,0 +1,7 @@
+Implementation of Fleischer's algorithm
+
+Usage:
+	./fl -f x.txt  <-- runs an interpretation of fleischer's algorithm from the text of that paper
+	./fl -22 x.txt <-- runs the pseudocode in figure 2.2 of fleischer's paper
+	./fl -22p x.txt <-- runs pseudocode restricted to just the paths that are 'allowed'
+

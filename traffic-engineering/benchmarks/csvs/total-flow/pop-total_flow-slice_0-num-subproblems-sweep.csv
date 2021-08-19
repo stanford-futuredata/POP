@@ -1,0 +1,4 @@
+problem,num_nodes,num_edges,traffic_seed,tm_model,scale_factor,num_commodities,total_demand,algo,split_method,split_fraction,num_subproblems,num_paths,edge_disjoint,dist_metric,objective,obj_val,runtime
+Kdl.graphml,754,1790,1710674203,gravity,16.0,567745,24000.064453125,pop,random,0,4,4,True,inv-cap,total_flow,21077.95060316188,13.96920394897461
+Kdl.graphml,754,1790,1710674203,gravity,16.0,567745,24000.064453125,pop,random,0,16,4,True,inv-cap,total_flow,21075.42519818241,4.505286931991577
+Kdl.graphml,754,1790,1710674203,gravity,16.0,567745,24000.064453125,pop,random,0,64,4,True,inv-cap,total_flow,21070.269234570616,1.473222017288208
