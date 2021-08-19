@@ -18,11 +18,11 @@ PROBLEM_NAMES = [
     "TataNld.graphml",
     "Deltacom.graphml",
     "DialtelecomCz.graphml",
-    # "Uninett2010.graphml",
-    # "Interoute.graphml",
-    # "Ion.graphml",
+    "Uninett2010.graphml",
+    "Interoute.graphml",
+    "Ion.graphml",
     "Kdl.graphml",
-    # "erdos-renyi-1260231677.json",
+    "erdos-renyi-1260231677.json",
 ]
 
 PATH_FORM_HYPERPARAMS = (4, True, "inv-cap")
