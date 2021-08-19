@@ -1,0 +1,8 @@
+*.sw*
+*.pyc
+*.log
+*.txt
+*.ipynb_checkpoints
+*.sol
+*.lp
+.vscode
