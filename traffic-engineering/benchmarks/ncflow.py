@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-from benchmark_consts import get_args_and_problems, print_, NCFLOW_HYPERPARAMS
+from benchmark_helpers import get_args_and_problems, print_, NCFLOW_HYPERPARAMS
 
 import os
 import pickle
@@ -204,14 +204,13 @@ def benchmark(problems, output_csv):
                     )
                 )
                 traceback.print_exc(file=sys.stdout)
-        return all_obj_vals, all_runtimes
 
 
 if __name__ == "__main__":
     if not os.path.exists(TOP_DIR):
         os.makedirs(TOP_DIR)
 
-    _, output_csv, problems = get_args_and_problems(OUTPUT_CSV_TEMPLATE)
+    args, output_csv, problems = get_args_and_problems(OUTPUT_CSV_TEMPLATE)
 
     if args.dry_run:
         print("Problems to run:")

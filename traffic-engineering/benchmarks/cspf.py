@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-from benchmark_consts import get_args_and_problems, print_, PATH_FORM_HYPERPARAMS
+from benchmark_helpers import get_args_and_problems, print_, PATH_FORM_HYPERPARAMS
 
 import os
 

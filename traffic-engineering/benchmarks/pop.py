@@ -4,7 +4,7 @@ import traceback
 import pickle
 import os
 from itertools import product
-from benchmark_consts import get_args_and_problems, print_, PATH_FORM_HYPERPARAMS
+from benchmark_helpers import get_args_and_problems, print_, PATH_FORM_HYPERPARAMS
 
 import sys
 
@@ -44,7 +44,14 @@ HEADERS = [
 PLACEHOLDER = ",".join("{}" for _ in HEADERS)
 
 
-def benchmark(problems, output_csv, obj):
+def benchmark(
+    problems,
+    output_csv,
+    obj,
+    num_subproblems_sweep,
+    split_methods_sweep,
+    split_fraction_sweep,
+):
 
     with open(output_csv, "a") as results:
         print_(",".join(HEADERS), file=results)
@@ -64,13 +71,8 @@ def benchmark(problems, output_csv, obj):
 
             num_paths, edge_disjoint, dist_metric = PATH_FORM_HYPERPARAMS
 
-            NUM_SUBPROBLEMS_SWEEP = [16]  # [2, 4, 8, 16, 32, 64]
-            SPLIT_METHODS_SWEEP = [
-                "random",
-            ]  # ["tailored", "skewed", "random", "means", "covs"]
-            SPLIT_FRACTION_SWEEP = [0]  # [0, 0.25, 0.5, 0.75, 1.0]
             for num_subproblems, split_method, split_fraction in product(
-                NUM_SUBPROBLEMS_SWEEP, SPLIT_METHODS_SWEEP, SPLIT_FRACTION_SWEEP
+                num_subproblems_sweep, split_methods_sweep, split_fraction_sweep
             ):
                 if "poisson-high-intra" in tm_fname:
                     split_fraction = 0.75
@@ -177,7 +179,41 @@ if __name__ == "__main__":
     if not os.path.exists(TOP_DIR):
         os.makedirs(TOP_DIR)
 
-    args, output_csv, problems = get_args_and_problems(OUTPUT_CSV_TEMPLATE)
+    args, output_csv, problems = get_args_and_problems(
+        OUTPUT_CSV_TEMPLATE,
+        [
+            [
+                "--num-subproblems",
+                {
+                    "type": int,
+                    "choices": [1, 2, 4, 8, 16, 32, 64],
+                    "nargs": "+",
+                    "default": [16, 64],
+                    "help": "Number of subproblems to use",
+                },
+            ],
+            [
+                "--split-methods",
+                {
+                    "type": str,
+                    "choices": ["random", "means", "tailored", "skewed", "covs"],
+                    "nargs": "+",
+                    "default": ["random"],
+                    "help": "Split method to use",
+                },
+            ],
+            [
+                "--split-fractions",
+                {
+                    "type": float,
+                    "choices": [0, 0.25, 0.5, 0.75, 1.0],
+                    "nargs": "+",
+                    "default": [0],
+                    "help": "Split fractions to use",
+                },
+            ],
+        ],
+    )
 
     if args.dry_run:
         print("Problems to run:")
