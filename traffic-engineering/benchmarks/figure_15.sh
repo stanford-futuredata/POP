@@ -8,7 +8,7 @@ set -x
     --tm-models gravity \
     --scale-factors 64 \
     --split-fractions 0 \
-    --num-subproblems 4, 8, 16 \
+    --num-subproblems 4 8 16 \
     --split-methods random means skewed \
     --obj total_flow
 
