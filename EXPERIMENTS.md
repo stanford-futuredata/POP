@@ -31,7 +31,7 @@ Source your .bashrc so that these variables are now available.
    machine that is connected to a university network. To get around this, you
    will have to set up SOCKS proxy via `ssh`:
    ```bash
-   ssh -D 1337 -f -C -q -N [your_university_username]@[domain_of_machine_in_university_network]
+   ssh -D 1337 -f -C -q -N [your_university_username]@[domain_or_public_ip_of_machine_in_university_network]
    ```
 
   * `-D`: Tells `ssh` that we want a SOCKS tunnel on the specified port number (you can choose a number between 1025 and 65536)
