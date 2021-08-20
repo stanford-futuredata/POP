@@ -58,3 +58,9 @@ Source your .bashrc so that these variables are now available.
   Set parameter LogFile to value gurobi.log
   ```
 6. Run `./download.sh` to download the traffic matrices used for our benchmarks.
+
+# Load Balancing
+1. cd `load_balancing`
+2. `mvn package`
+3. Run the experiment show in Figure 13: 
+```./figure13.sh```
