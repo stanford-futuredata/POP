@@ -61,11 +61,9 @@ Source your .bashrc so that these variables are now available.
 6. Run `./download.sh` to download the traffic matrices used for our benchmarks.
 
 ## Load Balancing
+
 1. `cd load_balancing`
 2. `mvn package`
-3. Run the experiment show in Figure 13: 
-
-```./figure13.sh```
 
 
 # Reproducing Experiments
@@ -108,3 +106,11 @@ To reproduce Figure 7 in the paper, run the following command from `cluster_sche
 ```bash
 python -u scripts/sweeps/run_sweep_continuous.py -s 4000 -e 5000 -l /path/to/log/directory -j 24 -p max_min_fairness_packed --seeds 0 1 2 -c 32:32:32 -a 6.4 -b 6.4 -n 1 --num_sub_problems 1 2 4 8
 ```
+
+## Figure 13
+
+To reproduce Figure 13 (that is, show the impact of POP on a MILP optimization problem
+for load balancing), run:
+
+```cd load_balancing; ./figure13.sh```
+
