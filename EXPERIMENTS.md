@@ -81,7 +81,7 @@ python -u scripts/sweeps/run_sweep_continuous.py -s 4000 -e 5000 -l /path/to/log
 
 The output of this script looks like this:
 
-```bash
+```
 [2021-08-20 11:44:33.941341] Running 12 total experiment(s)...
 [2021-08-20 11:44:34.013608] [Experiment ID:  0] Configuration: cluster_spec=v100:32|p100:32|k80:32, policy=MaxMinFairness_Packing, seed=0, lam=562.500000, profiling_percentage=1.000000, num_reference_models=26, num_sub_problems=1
 [2021-08-20 11:44:34.018696] [Experiment ID:  0] Configuration: cluster_spec=v100:32|p100:32|k80:32, policy=MaxMinFairness_Packing, seed=1, lam=562.500000, profiling_percentage=1.000000, num_reference_models=26, num_sub_problems=1
