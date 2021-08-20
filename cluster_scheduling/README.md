@@ -1,7 +1,9 @@
-# Heterogeneity-Aware Cluster Scheduling Policies for Deep Learning Workloads
+# POP + Heterogeneity-Aware Cluster Scheduling Policies
 
-This repository contains the source code implementation of the OSDI paper
-"Heterogeneity-Aware Cluster Scheduling Policies for Deep Learning Workloads".
+This directory contains code copied from the
+[Gavel repository](https://github.com/stanford-futuredata/gavel)
+and adapted to use POP. Instructions to install software dependencies
+and get started with the Gavel code are copied below.
 
 ## Directory Structure
 
@@ -10,13 +12,6 @@ Code for the scheduler, including the scheduling mechanism and simulator
 (`scheduler.py`), implementations of performance-aware policies (`policies/`),
 `GavelIterator` as a Python module, and a communication stack between the scheduler
 and workers that uses [gRPC](https://grpc.io/) (`runtime/`).
-
-`scheduler/notebooks` contains parsing and plotting code to analyze experiment
-runs.
-
-### `workloads`
-Implementations of target workloads in PyTorch, including changes needed to
-integrate with the `GavelIterator`.
 
 
 ## Setup
@@ -135,7 +130,4 @@ Sweep over fixed range:
 To evaluate policies on static traces (jobs only added to the cluster at the start
 of the trace), one can use the `scripts/sweeps/run_sweep_static.py` script, which
 runs different policies on multiple _static_ traces, generated using different
-seeds and numbers of jobs.
-
-For more detailed instructions on how to reproduce results from the OSDI paper,
-see [EXPERIMENTS.md](EXPERIMENTS.md).
+seeds and numbers of jobs
