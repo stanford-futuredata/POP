@@ -144,4 +144,4 @@ dependencies:
   - zipp=3.4.1=pyhd3eb1b0_0
   - zlib=1.2.11=h7b6447c_3
   - zstd=1.4.9=haebb681_0
-prefix: /lfs/0/fabuzaid/anaconda3/envs/traffic-engineering
+prefix: /home/ubuntu/miniconda3/envs/traffic-engineering
