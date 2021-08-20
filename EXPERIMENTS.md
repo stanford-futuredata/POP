@@ -1,4 +1,5 @@
 # Setup
+0. Mount the EBS volume (TODO: specifics)
 1. Install dependencies:
   ```bash
   sudo apt-get install -y build-essential cmake python-dev python3-dev openjdk-11-jdk maven unzip zip htop
