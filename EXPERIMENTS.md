@@ -7,7 +7,7 @@
 2. Install [Miniconda with Python 3.8](https://repo.anaconda.com/miniconda/Miniconda3-py38_4.10.3-Linux-x86_64.sh)
 3. Run `conda env create -f environment.yml` in `traffic_engineering/`
 
-# Traffic Engineering
+## Traffic Engineering
 1. `cd traffic_engineering/`
 2. `conda activate traffic_engineering`
 3. `pip install -r requirements.txt`
@@ -60,9 +60,51 @@ Source your .bashrc so that these variables are now available.
   ```
 6. Run `./download.sh` to download the traffic matrices used for our benchmarks.
 
-# Load Balancing
+## Load Balancing
 1. `cd load_balancing`
 2. `mvn package`
 3. Run the experiment show in Figure 13: 
 
 ```./figure13.sh```
+
+
+# Reproducing Experiments
+
+## Figure 6: Max-Min Fairness Policy without Space Sharing
+
+To reproduce Figure 6 in the paper (that is, evaluate the max-min fairness policy presented
+in Section XX of the paper), run the following command from `cluster_scheduling/scheduling`:
+
+```bash
+python -u scripts/sweeps/run_sweep_continuous.py -s 4000 -e 5000 -l /path/to/log/directory -j 24 -p max_min_fairness_perf --seeds 0 1 2 -c 32:32:32 -a 6.0 -b 6.0 -n 1 --num_sub_problems 1 2 4 8
+```
+
+The output of this script looks like this:
+
+```bash
+[2021-08-20 11:44:33.941341] Running 12 total experiment(s)...
+[2021-08-20 11:44:34.013608] [Experiment ID:  0] Configuration: cluster_spec=v100:32|p100:32|k80:32, policy=MaxMinFairness_Packing, seed=0, lam=562.500000, profiling_percentage=1.000000, num_reference_models=26, num_sub_problems=1
+[2021-08-20 11:44:34.018696] [Experiment ID:  0] Configuration: cluster_spec=v100:32|p100:32|k80:32, policy=MaxMinFairness_Packing, seed=1, lam=562.500000, profiling_percentage=1.000000, num_reference_models=26, num_sub_problems=1
+[2021-08-20 11:44:34.024131] [Experiment ID:  0] Configuration: cluster_spec=v100:32|p100:32|k80:32, policy=MaxMinFairness_Packing, seed=2, lam=562.500000, profiling_percentage=1.000000, num_reference_models=26, num_sub_problems=1
+[2021-08-20 11:44:34.027469] [Experiment ID:  1] Configuration: cluster_spec=v100:32|p100:32|k80:32, policy=MaxMinFairness_Packing, seed=0, lam=562.500000, profiling_percentage=1.000000, num_reference_models=26, num_sub_problems=2
+[2021-08-20 11:44:34.034641] [Experiment ID:  1] Configuration: cluster_spec=v100:32|p100:32|k80:32, policy=MaxMinFairness_Packing, seed=1, lam=562.500000, profiling_percentage=1.000000, num_reference_models=26, num_sub_problems=2
+[2021-08-20 11:44:34.036817] [Experiment ID:  1] Configuration: cluster_spec=v100:32|p100:32|k80:32, policy=MaxMinFairness_Packing, seed=2, lam=562.500000, profiling_percentage=1.000000, num_reference_models=26, num_sub_problems=2
+[2021-08-20 11:44:34.042734] [Experiment ID:  2] Configuration: cluster_spec=v100:32|p100:32|k80:32, policy=MaxMinFairness_Packing, seed=0, lam=562.500000, profiling_percentage=1.000000, num_reference_models=26, num_sub_problems=4
+[2021-08-20 11:44:34.046593] [Experiment ID:  2] Configuration: cluster_spec=v100:32|p100:32|k80:32, policy=MaxMinFairness_Packing, seed=1, lam=562.500000, profiling_percentage=1.000000, num_reference_models=26, num_sub_problems=4
+[2021-08-20 11:44:34.049944] [Experiment ID:  2] Configuration: cluster_spec=v100:32|p100:32|k80:32, policy=MaxMinFairness_Packing, seed=2, lam=562.500000, profiling_percentage=1.000000, num_reference_models=26, num_sub_problems=4
+[2021-08-20 11:44:34.054563] [Experiment ID:  3] Configuration: cluster_spec=v100:32|p100:32|k80:32, policy=MaxMinFairness_Packing, seed=0, lam=562.500000, profiling_percentage=1.000000, num_reference_models=26, num_sub_problems=8
+[2021-08-20 11:44:34.059386] [Experiment ID:  3] Configuration: cluster_spec=v100:32|p100:32|k80:32, policy=MaxMinFairness_Packing, seed=1, lam=562.500000, profiling_percentage=1.000000, num_reference_models=26, num_sub_problems=8
+[2021-08-20 11:44:34.064934] [Experiment ID:  3] Configuration: cluster_spec=v100:32|p100:32|k80:32, policy=MaxMinFairness_Packing, seed=2, lam=562.500000, profiling_percentage=1.000000, num_reference_models=26, num_sub_problems=8
+...
+```
+
+This can take a couple of hours to complete. We suggest using `tmux`.
+
+
+## Figure 7: Max-Min Fairness Policy with Space Sharing
+
+To reproduce Figure 7 in the paper, run the following command from `cluster_scheduling/scheduling`:
+
+```bash
+python -u scripts/sweeps/run_sweep_continuous.py -s 4000 -e 5000 -l /path/to/log/directory -j 24 -p max_min_fairness_packed --seeds 0 1 2 -c 32:32:32 -a 6.4 -b 6.4 -n 1 --num_sub_problems 1 2 4 8
+```
