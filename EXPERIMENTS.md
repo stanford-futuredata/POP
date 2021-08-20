@@ -7,7 +7,7 @@
 3. Run `conda env create -f environment.yml` in `traffic_engineering/`
 
 # Traffic Engineering
-1. cd `traffic_engineering/`
+1. `cd traffic_engineering/`
 2. `conda activate traffic_engineering`
 3. `pip install -r requirements.txt`
 4. Download and install [gurobi 8.1.1](https://packages.gurobi.com/8.1/gurobi8.1.1_linux64.tar.gz). Unzip the tarfile in your home directory and
@@ -60,7 +60,8 @@ Source your .bashrc so that these variables are now available.
 6. Run `./download.sh` to download the traffic matrices used for our benchmarks.
 
 # Load Balancing
-1. cd `load_balancing`
+1. `cd load_balancing`
 2. `mvn package`
 3. Run the experiment show in Figure 13: 
+
 ```./figure13.sh```
