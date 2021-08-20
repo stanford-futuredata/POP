@@ -1,7 +1,7 @@
 # Setup
 1. Install dependencies:
   ```bash
-  sudo apt-get install -y build-essential cmake python-dev python3-dev unzip zip
+  sudo apt-get install -y build-essential cmake python-dev python3-dev openjdk-11-jdk maven unzip zip htop
   ```
 2. Install [Miniconda with Python 3.8](https://repo.anaconda.com/miniconda/Miniconda3-py38_4.10.3-Linux-x86_64.sh)
 3. Run `conda env create -f environment.yml` in `traffic_engineering/`
