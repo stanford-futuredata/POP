@@ -17,3 +17,7 @@ To test with POP:
 To test with the heuristic:
 
     java -jar target/POP-1.0-SNAPSHOT-fat-tests.jar -numShards SHARDS -numServers SERVERS -benchmark heuristic
+
+To run experiment shown in Figure 13:
+
+    ./figure13.sh
