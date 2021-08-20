@@ -5,11 +5,11 @@
   sudo apt-get install -y build-essential cmake python-dev python3-dev unzip zip
   ```
 2. Install [Miniconda with Python 3.8](https://repo.anaconda.com/miniconda/Miniconda3-py38_4.10.3-Linux-x86_64.sh)
-3. Run `conda env create -f environment.yml` in `traffic-engineering/`
+3. Run `conda env create -f environment.yml` in `traffic_engineering/`
 
 # Traffic Engineering
-1. cd `traffic-engineering/`
-2. `conda activate traffic-engineering`
+1. cd `traffic_engineering/`
+2. `conda activate traffic_engineering`
 3. `pip install -r requirements.txt`
 4. Download and install [gurobi 8.1.1](https://packages.gurobi.com/8.1/gurobi8.1.1_linux64.tar.gz). Unzip the tarfile in your home directory and
 add/modify the following environment variables in your .bashrc:
