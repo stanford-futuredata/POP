@@ -220,4 +220,11 @@ if __name__ == "__main__":
         for problem in problems:
             print(problem)
     else:
-        benchmark(problems, output_csv, args.obj)
+        benchmark(
+            problems,
+            output_csv,
+            args.obj,
+            args.num_subproblems,
+            args.split_methods,
+            args.split_fractions,
+        )
