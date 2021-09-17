@@ -112,7 +112,7 @@
             <artifactId>cplex</artifactId>
             <version>12.10.0</version>
             <scope>system</scope>
-            <systemPath>/home/ubuntu/cplex121/cplex/lib/cplex.jar</systemPath>
+            <systemPath>${user.home}/cplex121/cplex/lib/cplex.jar</systemPath>
         </dependency>
 
 

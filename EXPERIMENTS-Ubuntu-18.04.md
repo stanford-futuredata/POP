@@ -4,35 +4,21 @@ This document describes how to run the experiments in the SOSP 2021 paper. These
 
 ## Setup
 
-We have created an image on Amazon EC2 with all software dependencies already
-installed. Skip to [the next section](#reproducing-experiments) if using this.
-
-| Field  | Value |
-| -------------  | ------------- |
-| Cloud Provider | AWS |
-| Region         | us-west-2  |
-| AMI ID         | ami-025c68f3633e5859e  |
-| AMI Name       | pop |
-
-See [this link](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html)
-for how to find and launch a public AMI (this assumes you have a valid billable AWS account setup).
-
 ### Software Dependencies
 
-This setup has been verified on Ubuntu 16.04.
+This setup has been verified on Ubuntu 18.04.
 
-1. Install `apt-get` dependencies:
+1. Install `apt` dependencies:
   ```bash
-  sudo add-apt-repository ppa:openjdk-r/ppa
-  sudo apt-get update && sudo apt -y upgrade
-  sudo apt-get install -y build-essential cmake python-dev python3-dev openjdk-11-jdk maven unzip zip htop g++ gcc libnuma-dev make numactl zlib1g-dev
+  sudo apt update && sudo apt -y upgrade
+  sudo apt install -y openjdk-11-jre-headless default-jre build-essential cmake python-dev python3-dev maven unzip zip htop g++ gcc libnuma-dev make numactl zlib1g-dev 
   ```
 2. Install [Miniconda with Python 3.8](https://repo.anaconda.com/miniconda/Miniconda3-py38_4.10.3-Linux-x86_64.sh):
 ```bash
 wget https://repo.anaconda.com/miniconda/Miniconda3-py38_4.10.3-Linux-x86_64.sh
 bash Miniconda3-py38_4.10.3-Linux-x86_64.sh
 ```
-3. Download and install CPLEX 12.1 free academic version (requires ibm account,
+3. Download and install CPLEX 12.1 free academic version (requires an IBM account,
 https://www.ibm.com/academic/technology/data-science). Run the installer,
 specifying `/home/ubuntu/cplex121` as the install directory. 
 4. Download and install [Gurobi 8.1.1](https://packages.gurobi.com/8.1/gurobi8.1.1_linux64.tar.gz):
@@ -74,7 +60,6 @@ cd POP/load_balancing
 mvn package
 ```
 
-
 # Reproducing Experiments
 
 ## Gurobi setup
@@ -88,24 +73,16 @@ to download the key to your machine; for example:
 grbgetkey xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 ```
 
-This will NOT work, because Gurobi requires that the command be run on a
-machine that is connected to a university network. To get around this, you
-will have to set up SOCKS proxy via `ssh`:
-```bash
-ssh -D 1337 -f -C -q -N [your_university_username]@[domain_or_public_ip_of_machine_in_university_network]
-```
-Then, run `grbgetkey` while simultaneously setting `HTTPS_PROXY`:
-```bash
-HTTPS_PROXY=socks5://localhost:1337 grbgetkey xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-```
-
-That should work! You can save the Gurobi license file to the `$HOME`
-directory: `/home/ubuntu/gurobi.lic`. (You can also now safely kill the
-`ssh` proxy process at this point.)
+Run the command to obtain your license file, which you should save to your `$HOME`
+directory.
 
 To confirm that the Gurobi license and installation are both setup
 correctly, run `gurobi_cl --license`, which should output the path of the license file.
+
 ## Figure 6: Max-Min Fairness Policy without Space Sharing
+
+(Note: For this experiment -- and all cluster scheduling experiments -- make
+sure you first activate the base Conda environment; run `conda activate base`.)
 
 To reproduce Figure 6 in the paper (that is, evaluate the max-min fairness policy presented
 in Section XX of the paper), run the following command from `cluster_scheduling/scheduling`
@@ -173,6 +150,10 @@ python -u scripts/sweeps/run_sweep_static.py -l /path/to/log/directory -j 24 -p 
 ```
 
 ## Figure 10: Max-Flow Traffic Engineering, Single Network
+
+(Note: For this experiment -- and all traffic engineering experiments -- make
+sure you first activate the `traffic_engineering` Conda environment; run `conda
+activate traffic_engineering`.)
 
 To reproduce Figure 10, run the following command from `traffic_engineering/benchmarks`:
 ```bash
