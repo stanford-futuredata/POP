@@ -164,6 +164,8 @@ To reproduce Figure 7 in the paper, run the following command from `cluster_sche
 python -u scripts/sweeps/run_sweep_continuous.py -s 4000 -e 5000 -l /path/to/log/directory -j 24 -p max_min_fairness_packed --seeds 0 1 2 -c 32:32:32 -a 6.4 -b 6.4 -n 1 --num_sub_problems 1 2 4 8
 ```
 
+Running the space-sharing policies is expensive, so this can take a very long time to run (on the order of a day or more).
+
 ## Figure 9: Minimize Makespan
 
 To reproduce Figure 9 in the paper, run the following command from `cluster_scheduling/scheduler`:
