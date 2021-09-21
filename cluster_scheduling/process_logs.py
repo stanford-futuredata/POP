@@ -46,26 +46,39 @@ def average_jct_fn(logfile_path, min_job_id=None, max_job_id=None):
             m = re.match(r'Job (\d+): (\d+\.\d+)', line)
             if m is not None:
                 job_id = int(m.group(1))
-                job_completion_time = float(m.group(2))
+                job_completion_time = round(float(m.group(2)), 3)
                 if min_job_id is None or min_job_id <= job_id:
                     if max_job_id is None or job_id <= max_job_id:
                         job_completion_times.append(
                             job_completion_time)
     if len(job_completion_times) == 0:
         return None
-    return np.mean(job_completion_times) / 3600
+    return round(np.mean(job_completion_times) / 3600, 3)
+
+
+def computation_time_fn(logfile_path):
+    computation_time = None
+    with open(logfile_path, 'r') as f:
+        lines = f.readlines()
+        for line in lines[-10:]:
+            # Mean allocation computation time: 0.0105 seconds
+            m = re.match(r'Mean allocation computation time: (\d+\.\d+) seconds', line)
+            if m is not None:
+                computation_time = round(float(m.group(1)), 3)
+    return computation_time
 
 
 def print_all_results_in_directory(logfile_directory):
-    print("V100s\tP100s\tK80s\tPolicy\t\t\tK\tSeed\tLambda\tMetric")
+    print("V100s\tP100s\tK80s\tPolicy\t\t\tK\tSeed\tLambda\tMetric\tComputation time")
     logfile_paths = get_logfile_paths(logfile_directory)
 
     for logfile_path in logfile_paths:
         (v100s, p100s, k80s, policy, num_sub_problems, seed,
          lambda_or_num_total_jobs, logfile_path) = logfile_path
         average_jct = average_jct_fn(logfile_path)
+        computation_time = computation_time_fn(logfile_path)
         results = [v100s, p100s, k80s, policy, num_sub_problems, seed,
-                   lambda_or_num_total_jobs, average_jct]
+                   lambda_or_num_total_jobs, average_jct, computation_time]
         print("\t".join([str(x) for x in results]))
 
 if __name__ == '__main__':
