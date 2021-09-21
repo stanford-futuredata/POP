@@ -141,19 +141,17 @@ available at `cluster_scheduling/process_logs.py` (the output directory used
 above needs to be provided to this script as a command line argument):
 
 ```bash
-> python process_logs.py -l /path/to/log/directory
-V100s	P100s	K80s	Policy			K	Seed	Lambda	Metric
-32	32	32	max_min_fairness_perf	2	2	600.0	68.90534538027778
-32	32	32	max_min_fairness_perf	2	0	600.0	88.34877724416667
-32	32	32	max_min_fairness_perf	4	1	600.0	83.10266556805554
-32	32	32	max_min_fairness_perf	4	2	600.0	69.92768312416666
-32	32	32	max_min_fairness_perf	4	0	600.0	88.20619143111111
-32	32	32	max_min_fairness_perf	1	2	600.0	68.09976061444445
-32	32	32	max_min_fairness_perf	1	0	600.0	84.05898847305555
-32	32	32	max_min_fairness_perf	8	1	600.0	84.41573162249999
-32	32	32	max_min_fairness_perf	8	2	600.0	72.12062279805555
-32	32	32	max_min_fairness_perf	8	0	600.0	89.80718732583334
+> python process_logs.py -l scheduler/logs/
+V100s	P100s	K80s	Policy			K	Seed	Lambda	Metric	Runtime
+32	32	32	max_min_fairness_perf	8	1	900.0	9.434	0.01
+32	32	32	max_min_fairness_perf	8	2	900.0	15.078	0.011
+32	32	32	max_min_fairness_perf	8	0	900.0	14.013	0.011
+32	32	32	max_min_fairness_perf	1	1	900.0	9.455	0.011
+32	32	32	max_min_fairness_perf	1	2	900.0	15.067	0.012
+32	32	32	max_min_fairness_perf	1	0	900.0	14.034	0.011
 ```
+
+We have also provided a notebook with code for analyzing this post-processed data. Pipe the `stdout` to a file (e.g., `max_min_fairness_perf.tsv`) and then point `cluster_scheduling/figures.ipynb` at this file.
 
 
 ## Figure 7: Max-Min Fairness Policy with Space Sharing

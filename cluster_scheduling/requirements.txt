@@ -9,11 +9,9 @@ grpcio-tools
 matplotlib
 matrix_completion
 numa
-opencv-python
 pandas
 pillow
 preconditions
 psutil
 seaborn
 setproctitle
-sklearn
