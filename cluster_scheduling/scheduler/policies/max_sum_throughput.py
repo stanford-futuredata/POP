@@ -73,7 +73,11 @@ class ThroughputNormalizedByCostSumWithPerfSLOs(Policy):
                     (num_steps_remaining[job_id] / SLOs[job_id])
             )
         cvxprob = cp.Problem(objective, constraints + SLO_constraints)
-        result = cvxprob.solve(solver=self._solver)
+        kwargs = {}
+        if self._solver == 'MOSEK':
+            import mosek
+            kwargs['mosek_params'] = {mosek.iparam.num_threads : 2}
+        result = cvxprob.solve(solver=self._solver, **kwargs)
 
         if cvxprob.status != "optimal":
             print('WARNING: Allocation returned by policy not optimal!')
@@ -81,7 +85,11 @@ class ThroughputNormalizedByCostSumWithPerfSLOs(Policy):
         if x.value is None:
             print('WARNING: No allocation possible with provided SLOs!')
             cvxprob = cp.Problem(objective, constraints)
-            result = cvxprob.solve(solver=self._solver)
+            kwargs = {}
+            if self._solver == 'MOSEK':
+                import mosek
+                kwargs['mosek_params'] = {mosek.iparam.num_threads : 2}
+            result = cvxprob.solve(solver=self._solver, **kwargs)
 
         return super().unflatten(x.value.clip(min=0.0).clip(max=1.0), index)
 
@@ -144,12 +152,20 @@ class ThroughputNormalizedByCostSumWithPackingSLOs(PolicyWithPacking):
             SLO_constraints.append(cp.vstack(per_job_throughputs) >=
                                    cp.vstack(per_job_SLOs))
         cvxprob = cp.Problem(objective, constraints + SLO_constraints)
-        result = cvxprob.solve(solver=self._solver)
+        kwargs = {}
+        if self._solver == 'MOSEK':
+            import mosek
+            kwargs['mosek_params'] = {mosek.iparam.num_threads : 2}
+        result = cvxprob.solve(solver=self._solver, **kwargs)
 
         if x.value is None:
             print('WARNING: No allocation possible with provided SLOs!')
             cvxprob = cp.Problem(objective, constraints)
-            result = cvxprob.solve(solver=self._solver)
+            kwargs = {}
+            if self._solver == 'MOSEK':
+                import mosek
+                kwargs['mosek_params'] = {mosek.iparam.num_threads : 2}
+            result = cvxprob.solve(solver=self._solver, **kwargs)
 
         if cvxprob.status != "optimal":
             print('WARNING: Allocation returned by policy not optimal!')

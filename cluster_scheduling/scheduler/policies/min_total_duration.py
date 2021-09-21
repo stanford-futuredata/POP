@@ -48,7 +48,11 @@ class MinTotalDurationPolicyWithPerf(Policy):
                 self._num_steps_remaining * inv_M)
         )
         cvxprob = cp.Problem(objective, constraints)
-        result = cvxprob.solve(solver=self._solver)
+        kwargs = {}
+        if self._solver == 'MOSEK':
+            import mosek
+            kwargs['mosek_params'] = {mosek.iparam.num_threads : 2}
+        result = cvxprob.solve(solver=self._solver, **kwargs)
 
         return cvxprob.status, x
 
@@ -101,7 +105,11 @@ class MinTotalDurationPolicyWithPacking(PolicyWithPacking):
                 cp.sum(cp.multiply(throughputs[indexes], x[indexes])) >=
                     (num_steps_remaining * inv_M))
         cvxprob = cp.Problem(objective, constraints)
-        result = cvxprob.solve(solver=self._solver)
+        kwargs = {}
+        if self._solver == 'MOSEK':
+            import mosek
+            kwargs['mosek_params'] = {mosek.iparam.num_threads : 2}
+        result = cvxprob.solve(solver=self._solver, **kwargs)
 
         return cvxprob.status, x
 
