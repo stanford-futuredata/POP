@@ -17,9 +17,7 @@ installed. Skip to [the next section](#reproducing-experiments) if using this.
 See [this link](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html)
 for how to find and launch a public AMI (this assumes you have a valid billable AWS account setup).
 
-### Software Dependencies
-
-This setup has been verified on Ubuntu 16.04.
+### Software Dependencies for Ubuntu 16.04
 
 1. Install `apt-get` dependencies:
   ```bash
@@ -32,7 +30,7 @@ This setup has been verified on Ubuntu 16.04.
 wget https://repo.anaconda.com/miniconda/Miniconda3-py38_4.10.3-Linux-x86_64.sh
 bash Miniconda3-py38_4.10.3-Linux-x86_64.sh
 ```
-3. Download and install CPLEX 12.1 free academic version (requires ibm account,
+3. Download and install CPLEX 12.1 free academic version (requires an IBM account,
 https://www.ibm.com/academic/technology/data-science). Run the installer,
 specifying `/home/ubuntu/cplex121` as the install directory. 
 4. Download and install [Gurobi 8.1.1](https://packages.gurobi.com/8.1/gurobi8.1.1_linux64.tar.gz):
@@ -49,6 +47,35 @@ export PATH=$GUROBI_HOME/bin:$PATH
 ```
 Source your `.bashrc` so that these variables are now available.
 
+
+### Software Dependencies for Ubuntu 18.04
+
+1. Install `apt` dependencies:
+  ```bash
+  sudo apt update && sudo apt -y upgrade
+  sudo apt install -y openjdk-11-jre-headless default-jre build-essential cmake python-dev python3-dev maven unzip zip htop g++ gcc libnuma-dev make numactl zlib1g-dev
+  ```
+2. Install [Miniconda with Python 3.8](https://repo.anaconda.com/miniconda/Miniconda3-py38_4.10.3-Linux-x86_64.sh):
+```bash
+wget https://repo.anaconda.com/miniconda/Miniconda3-py38_4.10.3-Linux-x86_64.sh
+bash Miniconda3-py38_4.10.3-Linux-x86_64.sh
+```
+3. Download and install CPLEX 12.1 free academic version (requires an IBM account,
+https://www.ibm.com/academic/technology/data-science). Run the installer,
+specifying `/home/ubuntu/cplex121` as the install directory.
+4. Download and install [Gurobi 8.1.1](https://packages.gurobi.com/8.1/gurobi8.1.1_linux64.tar.gz):
+```bash
+wget https://packages.gurobi.com/8.1/gurobi8.1.1_linux64.tar.gz
+tar xvf gurobi8.1.1_linux64.tar.gz
+```
+Add/modify the following environment variables in your `.bashrc`:
+```bash
+export GUROBI_HOME=$HOME/gurobi811/linux64
+export CPLEX_HOME=$HOME/cplex121/cplex
+export LD_LIBRARY_PATH=$CPLEX_HOME/bin/x86-64_linux:$GUROBI_HOME/lib:$LD_LIBRARY_PATH
+export PATH=$GUROBI_HOME/bin:$PATH
+```
+Source your `.bashrc` so that these variables are now available.
 
 #### Cluster Scheduling
 
