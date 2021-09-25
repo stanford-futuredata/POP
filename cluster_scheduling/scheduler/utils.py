@@ -496,7 +496,8 @@ def get_policy(policy_name, solver=None, seed=None,
                                                                    num_threads=num_threads)
     elif policy_name == 'min_total_duration_packed':
         policy = \
-            min_total_duration.MinTotalDurationPolicyWithPacking(solver=solver)
+            min_total_duration.MinTotalDurationPolicyWithPacking(solver=solver,
+                                                                 num_threads=num_threads)
     else:
         raise ValueError('Unknown policy!')
     return policy

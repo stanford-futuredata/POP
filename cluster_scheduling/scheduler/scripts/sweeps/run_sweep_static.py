@@ -35,7 +35,8 @@ def simulate_with_timeout(experiment_id, policy_name,
     cluster_spec_str = 'v100:%d|p100:%d|k80:%d' % (cluster_spec['v100'],
                                                    cluster_spec['p100'],
                                                    cluster_spec['k80'])
-    policy = utils.get_policy(policy_name, seed=seed, solver=solver)
+    num_threads = 32 // num_sub_problems
+    policy = utils.get_policy(policy_name, seed=seed, solver=solver, num_threads=num_threads)
     if verbose:
         current_time = datetime.datetime.now()
         print('[%s] [Experiment ID: %2d] '
@@ -254,7 +255,7 @@ if __name__=='__main__':
                         default=False,
                         help=('If set, generates multi-GPU jobs according to '
                               'a pre-defined distribution'))
-    parser.add_argument('--solver', type=str, choices=['ECOS', 'GUROBI', 'SCS'],
+    parser.add_argument('--solver', type=str, choices=['ECOS', 'GUROBI', 'SCS', 'MOSEK'],
                         default='ECOS', help='CVXPY solver')
     parser.add_argument('-v', '--verbose', action='store_true', default=True,
                         help='Verbose')

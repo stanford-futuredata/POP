@@ -8,10 +8,10 @@ from policy import Policy, PolicyWithPacking
 
 class MinTotalDurationPolicy(Policy):
 
-    def __init__(self, solver):
+    def __init__(self, solver, num_threads=None):
         self._name = 'MinTotalDuration'
         self._min_total_duration_perf_policy = \
-            MinTotalDurationPolicyWithPerf(solver)
+            MinTotalDurationPolicyWithPerf(solver, num_threads)
 
     def get_allocation(self, unflattened_throughputs, scale_factors,
                        num_steps_remaining, cluster_spec):
@@ -34,7 +34,8 @@ class MinTotalDurationPolicy(Policy):
 
 class MinTotalDurationPolicyWithPerf(Policy):
 
-    def __init__(self, solver):
+    def __init__(self, solver, num_threads=None):
+        self._num_threads = num_threads
         Policy.__init__(self, solver)
         self._name = 'MinTotalDuration_Perf'
 
@@ -51,7 +52,10 @@ class MinTotalDurationPolicyWithPerf(Policy):
         kwargs = {}
         if self._solver == 'MOSEK':
             import mosek
-            kwargs['mosek_params'] = {mosek.iparam.num_threads : 2}
+            if self._num_threads is None:
+                self._num_threads = 1
+            kwargs['mosek_params'] = {mosek.iparam.num_threads : self._num_threads}
+        print("Number of threads used: %d" % self._num_threads)
         result = cvxprob.solve(solver=self._solver, **kwargs)
 
         return cvxprob.status, x
@@ -83,7 +87,8 @@ class MinTotalDurationPolicyWithPerf(Policy):
 
 class MinTotalDurationPolicyWithPacking(PolicyWithPacking):
 
-    def __init__(self, solver):
+    def __init__(self, solver, num_threads=None):
+        self._num_threads = num_threads
         PolicyWithPacking.__init__(self, solver)
         self._name = 'MinTotalDuration_Packing'
 
@@ -108,7 +113,9 @@ class MinTotalDurationPolicyWithPacking(PolicyWithPacking):
         kwargs = {}
         if self._solver == 'MOSEK':
             import mosek
-            kwargs['mosek_params'] = {mosek.iparam.num_threads : 2}
+            if self._num_threads is None:
+                self._num_threads = 1
+            kwargs['mosek_params'] = {mosek.iparam.num_threads : self._num_threads}
         result = cvxprob.solve(solver=self._solver, **kwargs)
 
         return cvxprob.status, x
