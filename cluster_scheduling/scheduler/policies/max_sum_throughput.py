@@ -8,9 +8,10 @@ from policy import Policy, PolicyWithPacking
 
 class ThroughputSumWithPerf(Policy):
 
-    def __init__(self, solver):
+    def __init__(self, solver, num_threads=None):
         self._name = 'ThroughputSumWithPerf'
-        self._policy = ThroughputNormalizedByCostSumWithPerfSLOs(solver)
+        self._policy = ThroughputNormalizedByCostSumWithPerfSLOs(solver,
+                                                                 num_threads=num_threads)
 
     def get_allocation(self, unflattened_throughputs, scale_factors,
                        cluster_spec):
@@ -19,9 +20,10 @@ class ThroughputSumWithPerf(Policy):
                                            cluster_spec)
 
 class ThroughputNormalizedByCostSumWithPerf(Policy):
-    def __init__(self, solver):
+    def __init__(self, solver, num_threads=None):
         self._name = 'ThroughputNormalizedByCostSum_Perf'
-        self._policy = ThroughputNormalizedByCostSumWithPerfSLOs(solver)
+        self._policy = ThroughputNormalizedByCostSumWithPerfSLOs(solver,
+                                                                 num_threads=num_threads)
 
     def get_allocation(self, unflattened_throughputs, scale_factors,
                        cluster_spec, instance_costs):
@@ -32,7 +34,8 @@ class ThroughputNormalizedByCostSumWithPerf(Policy):
 
 class ThroughputNormalizedByCostSumWithPerfSLOs(Policy):
 
-    def __init__(self, solver):
+    def __init__(self, solver, num_threads=None):
+        self._num_threads = num_threads
         Policy.__init__(self, solver)
         self._name = 'ThroughputNormalizedByCostSum_PerfSLOs'
 
@@ -76,7 +79,9 @@ class ThroughputNormalizedByCostSumWithPerfSLOs(Policy):
         kwargs = {}
         if self._solver == 'MOSEK':
             import mosek
-            kwargs['mosek_params'] = {mosek.iparam.num_threads : 2}
+            if self._num_threads is None:
+                self._num_threads = 1
+            kwargs['mosek_params'] = {mosek.iparam.num_threads : self._num_threads}
         result = cvxprob.solve(solver=self._solver, **kwargs)
 
         if cvxprob.status != "optimal":
@@ -88,7 +93,9 @@ class ThroughputNormalizedByCostSumWithPerfSLOs(Policy):
             kwargs = {}
             if self._solver == 'MOSEK':
                 import mosek
-                kwargs['mosek_params'] = {mosek.iparam.num_threads : 2}
+                if self._num_threads is None:
+                    self._num_threads = 1
+                kwargs['mosek_params'] = {mosek.iparam.num_threads : self._num_threads}
             result = cvxprob.solve(solver=self._solver, **kwargs)
 
         return super().unflatten(x.value.clip(min=0.0).clip(max=1.0), index)
@@ -155,7 +162,9 @@ class ThroughputNormalizedByCostSumWithPackingSLOs(PolicyWithPacking):
         kwargs = {}
         if self._solver == 'MOSEK':
             import mosek
-            kwargs['mosek_params'] = {mosek.iparam.num_threads : 2}
+            if self._num_threads is None:
+                self._num_threads = 1
+            kwargs['mosek_params'] = {mosek.iparam.num_threads : self._num_threads}
         result = cvxprob.solve(solver=self._solver, **kwargs)
 
         if x.value is None:
@@ -164,7 +173,9 @@ class ThroughputNormalizedByCostSumWithPackingSLOs(PolicyWithPacking):
             kwargs = {}
             if self._solver == 'MOSEK':
                 import mosek
-                kwargs['mosek_params'] = {mosek.iparam.num_threads : 2}
+                if self._num_threads is None:
+                    self._num_threads = 1
+                kwargs['mosek_params'] = {mosek.iparam.num_threads : self._num_threads}
             result = cvxprob.solve(solver=self._solver, **kwargs)
 
         if cvxprob.status != "optimal":

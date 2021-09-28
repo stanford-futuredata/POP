@@ -106,7 +106,9 @@ class FinishTimeFairnessPolicyWithPerf(Policy):
         kwargs = {}
         if self._solver == 'MOSEK':
             import mosek
-            kwargs['mosek_params'] = {mosek.iparam.num_threads : 2}
+            if self._num_threads is None:
+                self._num_threads = 1
+            kwargs['mosek_params'] = {mosek.iparam.num_threads : self._num_threads}
         result = cvxprob.solve(solver=self._solver, **kwargs)
 
         if cvxprob.status != "optimal":
@@ -212,7 +214,9 @@ class FinishTimeFairnessPolicyWithPacking(PolicyWithPacking):
         kwargs = {}
         if self._solver == 'MOSEK':
             import mosek
-            kwargs['mosek_params'] = {mosek.iparam.num_threads : 2}
+            if self._num_threads is None:
+                self._num_threads = 1
+            kwargs['mosek_params'] = {mosek.iparam.num_threads : self._num_threads}
         result = cvxprob.solve(solver=self._solver, **kwargs)
 
         if cvxprob.status != "optimal":

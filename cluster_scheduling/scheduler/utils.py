@@ -466,7 +466,8 @@ def get_policy(policy_name, solver=None, seed=None,
                                                                num_threads=num_threads)
     elif policy_name == 'max_min_fairness_packed':
         policy = \
-            max_min_fairness.MaxMinFairnessPolicyWithPacking(solver=solver, num_threads=num_threads)
+            max_min_fairness.MaxMinFairnessPolicyWithPacking(solver=solver,
+                                                             num_threads=num_threads)
     elif policy_name == 'max_min_fairness_water_filling':
         policy = max_min_fairness_water_filling.MaxMinFairnessWaterFillingPolicy(
             priority_reweighting_policies=priority_reweighting_policies)
