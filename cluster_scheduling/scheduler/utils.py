@@ -447,14 +447,16 @@ def get_policy(policy_name, solver=None, seed=None,
     elif policy_name == 'fifo_packed':
         policy = fifo.FIFOPolicyWithPacking()
     elif policy_name == 'finish_time_fairness':
-        policy = finish_time_fairness.FinishTimeFairnessPolicy(solver=solver)
+        policy = finish_time_fairness.FinishTimeFairnessPolicy(solver=solver,
+                                                               num_threads=num_threads)
     elif policy_name == 'finish_time_fairness_perf':
         policy = \
-            finish_time_fairness.FinishTimeFairnessPolicyWithPerf(solver=solver)
+            finish_time_fairness.FinishTimeFairnessPolicyWithPerf(solver=solver,
+                                                                  num_threads=num_threads)
     elif policy_name == 'finish_time_fairness_packed':
         policy = \
             finish_time_fairness.FinishTimeFairnessPolicyWithPacking(
-                solver=solver)
+                solver=solver, num_threads=num_threads)
     elif policy_name == 'gandiva':
         policy = gandiva.GandivaPolicy(seed=seed)
     elif policy_name == 'isolated':
@@ -478,17 +480,19 @@ def get_policy(policy_name, solver=None, seed=None,
         policy = max_min_fairness_water_filling.MaxMinFairnessWaterFillingPolicyWithPacking(
             priority_reweighting_policies=priority_reweighting_policies)
     elif policy_name == 'max_sum_throughput_perf':
-        policy = max_sum_throughput.ThroughputSumWithPerf(solver=solver)
+        policy = max_sum_throughput.ThroughputSumWithPerf(solver=solver,
+                                                          num_threads=num_threads)
     elif policy_name == 'max_sum_throughput_normalized_by_cost_perf':
         policy = max_sum_throughput.ThroughputNormalizedByCostSumWithPerf(
-                    solver=solver)
+                    solver=solver, num_threads=num_threads)
     elif policy_name == 'max_sum_throughput_normalized_by_cost_perf_SLOs':
         policy = max_sum_throughput.ThroughputNormalizedByCostSumWithPerfSLOs(
-                    solver=solver)
+                    solver=solver, num_threads=num_threads)
     elif policy_name == 'max_sum_throughput_normalized_by_cost_packed_SLOs':
         policy = \
             max_sum_throughput.ThroughputNormalizedByCostSumWithPackingSLOs(
-                                                        solver=solver)
+                                                        solver=solver,
+                                                        num_threads=num_threads)
     elif policy_name == 'min_total_duration':
         policy = min_total_duration.MinTotalDurationPolicy(solver=solver,
                                                            num_threads=num_threads)
