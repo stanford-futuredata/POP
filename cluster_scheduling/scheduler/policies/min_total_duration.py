@@ -55,7 +55,6 @@ class MinTotalDurationPolicyWithPerf(Policy):
             if self._num_threads is None:
                 self._num_threads = 1
             kwargs['mosek_params'] = {mosek.iparam.num_threads : self._num_threads}
-        print("Number of threads used: %d" % self._num_threads)
         result = cvxprob.solve(solver=self._solver, **kwargs)
 
         return cvxprob.status, x
