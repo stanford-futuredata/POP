@@ -175,6 +175,6 @@ if __name__ == '__main__':
     runtimes, all_effective_throughputs = \
         get_runtimes_and_effective_throughputs('max_min_fairness_packed',
                                                all_num_sub_clusters,
-                                               1024)
+                                               2048)
     print(runtimes)
     print(all_effective_throughputs)
