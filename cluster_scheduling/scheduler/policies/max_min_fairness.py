@@ -9,10 +9,10 @@ from proportional import ProportionalPolicy
 
 class MaxMinFairnessPolicy(Policy):
 
-    def __init__(self, solver):
+    def __init__(self, solver, num_threads=None):
         self._name = 'MaxMinFairness'
         self._max_min_fairness_perf_policy = \
-            MaxMinFairnessPolicyWithPerf(solver)
+            MaxMinFairnessPolicyWithPerf(solver, num_threads)
 
     def get_allocation(self, unflattened_throughputs, scale_factors,
                        priority_weights, cluster_spec):
@@ -34,8 +34,9 @@ class MaxMinFairnessPolicy(Policy):
 
 class MaxMinFairnessPolicyWithPerf(Policy):
 
-    def __init__(self, solver):
+    def __init__(self, solver, num_threads=None):
         Policy.__init__(self, solver)
+        self._num_threads = num_threads
         self._name = 'MaxMinFairness_Perf'
         self._proportional_policy = ProportionalPolicy()
 
@@ -73,7 +74,13 @@ class MaxMinFairnessPolicyWithPerf(Policy):
         # Make sure that the allocation can fit in the cluster.
         constraints = self.get_base_constraints(x, scale_factors_array)
         cvxprob = cp.Problem(objective, constraints)
-        result = cvxprob.solve(solver=self._solver)
+        kwargs = {}
+        if self._solver == 'MOSEK':
+            import mosek
+            if self._num_threads is None:
+                self._num_threads = 1
+            kwargs['mosek_params'] = {mosek.iparam.num_threads : self._num_threads}
+        result = cvxprob.solve(solver=self._solver, **kwargs)
 
         if cvxprob.status != "optimal":
             print('WARNING: Allocation returned by policy not optimal!')
@@ -83,8 +90,9 @@ class MaxMinFairnessPolicyWithPerf(Policy):
 
 class MaxMinFairnessPolicyWithPacking(PolicyWithPacking):
 
-    def __init__(self, solver):
+    def __init__(self, solver, num_threads=None):
         PolicyWithPacking.__init__(self, solver)
+        self._num_threads = num_threads
         self._name = 'MaxMinFairness_Packing'
         self._proportional_policy = ProportionalPolicy()
 
@@ -251,7 +259,13 @@ class MaxMinFairnessPolicyWithPacking(PolicyWithPacking):
                                       axis=1)))
 
         cvxprob = cp.Problem(objective, constraints)
-        result = cvxprob.solve(solver=self._solver)
+        kwargs = {}
+        if self._solver == 'MOSEK':
+            import mosek
+            if self._num_threads is None:
+                self._num_threads = 1
+            kwargs['mosek_params'] = {mosek.iparam.num_threads : self._num_threads}
+        result = cvxprob.solve(solver=self._solver, **kwargs)
 
         if cvxprob.status != "optimal":
             print('WARNING: Allocation returned by policy not optimal!')
@@ -343,12 +357,17 @@ class MaxMinFairnessPolicyWithPacking(PolicyWithPacking):
                 if scale_factors_array[i,j] == 0:
                     constraints.append(x[i,j] == 0)
         cvxprob = cp.Problem(objective, constraints)
+
+        kwargs = {}
         if self._solver == 'SCS':
-            # anderson acceleration is sometimes unstable, and adds
-            # significant overhead
-            kwargs = {'acceleration_lookback': 0}
-        else:
-            kwargs = {}
+            # Anderson acceleration is sometimes unstable, and adds
+            # significant overhead.
+            kwargs['acceleration_lookback'] = 0
+        elif self._solver == 'MOSEK':
+            import mosek
+            if self._num_threads is None:
+                self._num_threads = 1
+            kwargs['mosek_params'] = {mosek.iparam.num_threads : self._num_threads}
 
         result = cvxprob.solve(solver=self._solver, **kwargs)
 

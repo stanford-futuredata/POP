@@ -432,7 +432,8 @@ def read_all_throughputs_json(throughputs_file):
     return throughputs
 
 def get_policy(policy_name, solver=None, seed=None,
-               priority_reweighting_policies=None):
+               priority_reweighting_policies=None,
+               num_threads=None):
     if policy_name.startswith('allox'):
         if policy_name == 'allox':
             alpha = 1.0
@@ -446,14 +447,16 @@ def get_policy(policy_name, solver=None, seed=None,
     elif policy_name == 'fifo_packed':
         policy = fifo.FIFOPolicyWithPacking()
     elif policy_name == 'finish_time_fairness':
-        policy = finish_time_fairness.FinishTimeFairnessPolicy(solver=solver)
+        policy = finish_time_fairness.FinishTimeFairnessPolicy(solver=solver,
+                                                               num_threads=num_threads)
     elif policy_name == 'finish_time_fairness_perf':
         policy = \
-            finish_time_fairness.FinishTimeFairnessPolicyWithPerf(solver=solver)
+            finish_time_fairness.FinishTimeFairnessPolicyWithPerf(solver=solver,
+                                                                  num_threads=num_threads)
     elif policy_name == 'finish_time_fairness_packed':
         policy = \
             finish_time_fairness.FinishTimeFairnessPolicyWithPacking(
-                solver=solver)
+                solver=solver, num_threads=num_threads)
     elif policy_name == 'gandiva':
         policy = gandiva.GandivaPolicy(seed=seed)
     elif policy_name == 'isolated':
@@ -461,10 +464,12 @@ def get_policy(policy_name, solver=None, seed=None,
     elif policy_name == 'max_min_fairness':
         policy = max_min_fairness.MaxMinFairnessPolicy(solver=solver)
     elif policy_name == 'max_min_fairness_perf':
-        policy = max_min_fairness.MaxMinFairnessPolicyWithPerf(solver=solver)
+        policy = max_min_fairness.MaxMinFairnessPolicyWithPerf(solver=solver,
+                                                               num_threads=num_threads)
     elif policy_name == 'max_min_fairness_packed':
         policy = \
-            max_min_fairness.MaxMinFairnessPolicyWithPacking(solver=solver)
+            max_min_fairness.MaxMinFairnessPolicyWithPacking(solver=solver,
+                                                             num_threads=num_threads)
     elif policy_name == 'max_min_fairness_water_filling':
         policy = max_min_fairness_water_filling.MaxMinFairnessWaterFillingPolicy(
             priority_reweighting_policies=priority_reweighting_policies)
@@ -475,24 +480,29 @@ def get_policy(policy_name, solver=None, seed=None,
         policy = max_min_fairness_water_filling.MaxMinFairnessWaterFillingPolicyWithPacking(
             priority_reweighting_policies=priority_reweighting_policies)
     elif policy_name == 'max_sum_throughput_perf':
-        policy = max_sum_throughput.ThroughputSumWithPerf(solver=solver)
+        policy = max_sum_throughput.ThroughputSumWithPerf(solver=solver,
+                                                          num_threads=num_threads)
     elif policy_name == 'max_sum_throughput_normalized_by_cost_perf':
         policy = max_sum_throughput.ThroughputNormalizedByCostSumWithPerf(
-                    solver=solver)
+                    solver=solver, num_threads=num_threads)
     elif policy_name == 'max_sum_throughput_normalized_by_cost_perf_SLOs':
         policy = max_sum_throughput.ThroughputNormalizedByCostSumWithPerfSLOs(
-                    solver=solver)
+                    solver=solver, num_threads=num_threads)
     elif policy_name == 'max_sum_throughput_normalized_by_cost_packed_SLOs':
         policy = \
             max_sum_throughput.ThroughputNormalizedByCostSumWithPackingSLOs(
-                                                        solver=solver)
+                                                        solver=solver,
+                                                        num_threads=num_threads)
     elif policy_name == 'min_total_duration':
-        policy = min_total_duration.MinTotalDurationPolicy(solver=solver)
+        policy = min_total_duration.MinTotalDurationPolicy(solver=solver,
+                                                           num_threads=num_threads)
     elif policy_name == 'min_total_duration_perf':
-        policy = min_total_duration.MinTotalDurationPolicyWithPerf(solver=solver)
+        policy = min_total_duration.MinTotalDurationPolicyWithPerf(solver=solver,
+                                                                   num_threads=num_threads)
     elif policy_name == 'min_total_duration_packed':
         policy = \
-            min_total_duration.MinTotalDurationPolicyWithPacking(solver=solver)
+            min_total_duration.MinTotalDurationPolicyWithPacking(solver=solver,
+                                                                 num_threads=num_threads)
     else:
         raise ValueError('Unknown policy!')
     return policy

@@ -33,7 +33,9 @@ def simulate_with_timeout(experiment_id, policy_name,
     cluster_spec_str = 'v100:%d|p100:%d|k80:%d' % (cluster_spec['v100'],
                                                            cluster_spec['p100'],
                                                            cluster_spec['k80'])
-    policy = utils.get_policy(policy_name, solver=solver, seed=seed)
+    num_threads = 32 // num_sub_problems
+    policy = utils.get_policy(policy_name, solver=solver, seed=seed,
+                              num_threads=num_threads)
     if verbose:
         current_time = datetime.datetime.now()
         print('[%s] [Experiment ID: %2d] '
@@ -316,8 +318,8 @@ if __name__=='__main__':
                         default=False,
                         help=('If set, adds as many jobs as there are workers '
                               'before beginning the simulation.'))
-    parser.add_argument('--solver', type=str, choices=['ECOS', 'GUROBI', 'SCS'],
-                        default='ECOS', help='CVXPY solver')
+    parser.add_argument('--solver', type=str, choices=['ECOS', 'GUROBI', 'SCS', 'MOSEK'],
+                        default='MOSEK', help='CVXPY solver')
     parser.add_argument('-v', '--verbose', action='store_true', default=True,
                         help='Verbose')
     parser.add_argument('--checkpoint-threshold', type=int, default=None,

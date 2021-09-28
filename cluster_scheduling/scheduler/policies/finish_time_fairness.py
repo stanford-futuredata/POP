@@ -103,7 +103,13 @@ class FinishTimeFairnessPolicyWithPerf(Policy):
         constraints = self.get_base_constraints(x, scale_factors_array)
 
         cvxprob = cp.Problem(objective, constraints)
-        result = cvxprob.solve(solver=self._solver)
+        kwargs = {}
+        if self._solver == 'MOSEK':
+            import mosek
+            if self._num_threads is None:
+                self._num_threads = 1
+            kwargs['mosek_params'] = {mosek.iparam.num_threads : self._num_threads}
+        result = cvxprob.solve(solver=self._solver, **kwargs)
 
         if cvxprob.status != "optimal":
             print('WARNING: Allocation returned by policy not optimal!')
@@ -205,7 +211,13 @@ class FinishTimeFairnessPolicyWithPacking(PolicyWithPacking):
                 if scale_factors_array[i,j] == 0:
                     constraints.append(x[i,j] == 0)
         cvxprob = cp.Problem(objective, constraints)
-        result = cvxprob.solve(solver=self._solver)
+        kwargs = {}
+        if self._solver == 'MOSEK':
+            import mosek
+            if self._num_threads is None:
+                self._num_threads = 1
+            kwargs['mosek_params'] = {mosek.iparam.num_threads : self._num_threads}
+        result = cvxprob.solve(solver=self._solver, **kwargs)
 
         if cvxprob.status != "optimal":
             print('WARNING: Allocation returned by policy not optimal!')

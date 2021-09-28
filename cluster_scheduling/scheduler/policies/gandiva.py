@@ -24,10 +24,14 @@ class GandivaPolicy(PolicyWithPacking):
         (job_ids, single_job_ids, worker_types, relevant_combinations) = index
         m = len(job_combinations_to_schedule)
 
+
+        indices = {}
+        for i, job_id in enumerate(job_ids):
+            indices[job_id] = i
+
         job_combination_indices_to_schedule = []
         for job_combination_to_schedule in job_combinations_to_schedule:
-            job_combination_indices_to_schedule.append(
-                job_ids.index(job_combination_to_schedule))
+            job_combination_indices_to_schedule.append(indices[job_combination_to_schedule])
 
         scale_factors_array = self.scale_factors_array(
             scale_factors, job_ids, len(job_ids), len(worker_types))
