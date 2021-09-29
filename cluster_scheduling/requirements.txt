@@ -8,6 +8,7 @@ grpcio
 grpcio-tools
 matplotlib
 matrix_completion
+mosek
 numa
 pandas
 pillow
