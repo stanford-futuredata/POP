@@ -115,9 +115,11 @@ to download the key to your machine; for example:
 grbgetkey xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 ```
 
-This will NOT work, because Gurobi requires that the command be run on a
-machine that is connected to a university network. To get around this, you
-will have to set up SOCKS proxy via `ssh`:
+This will NOT work if you are not on a university network machine, since Gurobi
+requires that the command be run on a machine that is connected to a university
+network.
+
+To get around this, you will have to set up SOCKS proxy via `ssh`:
 ```bash
 ssh -D 1337 -f -C -q -N [your_university_username]@[domain_or_public_ip_of_machine_in_university_network]
 ```
@@ -127,8 +129,8 @@ HTTPS_PROXY=socks5://localhost:1337 grbgetkey xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxx
 ```
 
 That should work! You can save the Gurobi license file to the `$HOME`
-directory: `/home/ubuntu/gurobi.lic`. (You can also now safely kill the
-`ssh` proxy process at this point.)
+directory: `/home/ubuntu/gurobi.lic`. You can also now safely kill the
+`ssh` proxy process at this point.
 
 To confirm that the Gurobi license and installation are both setup
 correctly, run `gurobi_cl --license`, which should output the path of the license file.
