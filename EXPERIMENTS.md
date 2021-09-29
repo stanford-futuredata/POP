@@ -81,17 +81,18 @@ Source your `.bashrc` so that these variables are now available.
 
 ```bash
 cd POP/cluster_scheduling
+conda create --name pop
 pip install -r requirements.txt
 cd scheduler; make
 ```
 
 #### Traffic Engineering
 ```bash
-cd POP/traffic_engineering`
+cd POP/traffic_engineering
 conda env create -f environment.yml
 conda activate traffic_engineering
 pip install -r requirements.txt
-./download.sh` # download the traffic matrices used in our experiments.
+./download.sh # download the traffic matrices used in our experiments.
 ```
 
 #### Load Balancing
@@ -104,7 +105,7 @@ mvn package
 
 # Reproducing Experiments
 
-## Gurobi setup
+## Gurobi Setup
 Obtain a [free Gurobi academic
 license](https://www.gurobi.com/academia/academic-program-and-licenses/).  Note
 that you will have to use `grbgetkey`, which should be available to you once
@@ -134,6 +135,11 @@ directory: `/home/ubuntu/gurobi.lic`. You can also now safely kill the
 
 To confirm that the Gurobi license and installation are both setup
 correctly, run `gurobi_cl --license`, which should output the path of the license file.
+
+## MOSEK Setup
+
+Obtain a [free MOSEK license](https://www.mosek.com/products/academic-licenses/).
+Put the resulting `mosek.lic` file at `$HOME/mosek/mosek.lic`.
 
 ## Figure 2: Max-Min Fairness Policy with Space Sharing for Large Problem
 
