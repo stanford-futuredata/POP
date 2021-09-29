@@ -132,74 +132,61 @@ directory: `/home/ubuntu/gurobi.lic`. (You can also now safely kill the
 
 To confirm that the Gurobi license and installation are both setup
 correctly, run `gurobi_cl --license`, which should output the path of the license file.
-## Figure 6: Max-Min Fairness Policy without Space Sharing
+
+## Figure 2: Max-Min Fairness Policy with Space Sharing with No Trace
+
+To reproduce Figure 2 in the paper, run the following command from `cluster_scheduling`:
+
+```bash
+python figure2.py
+```
+
+## Figure 6: Max-Min Fairness Policy with Space Sharing with Trace
 
 To reproduce Figure 6 in the paper (that is, evaluate the max-min fairness policy presented
-in Section XX of the paper), run the following command from `cluster_scheduling/scheduling`
+in Section 4.1 of the paper), run the following command from `cluster_scheduling/scheduling`
 (fill in the output directory as appropriate, this needs to be created beforehand):
 
 ```bash
-python -u scripts/sweeps/run_sweep_continuous.py -s 4000 -e 5000 -l /path/to/log/directory -j 24 -p max_min_fairness_perf --seeds 0 1 2 -c 32:32:32 -a 6.0 -b 6.0 -n 1 --num_sub_problems 1 2 4 8
+python -u scripts/sweeps/run_sweep_continuous.py -s 1000 -e 1500 -l /path/to/log/directory -j 1 -p max_min_fairness_packed --seeds 1 -c 32:32:32 -a 6.4 -b 6.4 -n 1 --num_sub_problems 1 2 4 8 --solver MOSEK
 ```
 
-The output of this script looks like this:
+Partial output of this script looks like this:
 
 ```
-[2021-08-20 11:44:33.941341] Running 12 total experiment(s)...
-[2021-08-20 11:44:34.013608] [Experiment ID:  0] Configuration: cluster_spec=v100:32|p100:32|k80:32, policy=MaxMinFairness_Packing, seed=0, lam=562.500000, profiling_percentage=1.000000, num_reference_models=26, num_sub_problems=1
-[2021-08-20 11:44:34.018696] [Experiment ID:  0] Configuration: cluster_spec=v100:32|p100:32|k80:32, policy=MaxMinFairness_Packing, seed=1, lam=562.500000, profiling_percentage=1.000000, num_reference_models=26, num_sub_problems=1
-[2021-08-20 11:44:34.024131] [Experiment ID:  0] Configuration: cluster_spec=v100:32|p100:32|k80:32, policy=MaxMinFairness_Packing, seed=2, lam=562.500000, profiling_percentage=1.000000, num_reference_models=26, num_sub_problems=1
-[2021-08-20 11:44:34.027469] [Experiment ID:  1] Configuration: cluster_spec=v100:32|p100:32|k80:32, policy=MaxMinFairness_Packing, seed=0, lam=562.500000, profiling_percentage=1.000000, num_reference_models=26, num_sub_problems=2
-[2021-08-20 11:44:34.034641] [Experiment ID:  1] Configuration: cluster_spec=v100:32|p100:32|k80:32, policy=MaxMinFairness_Packing, seed=1, lam=562.500000, profiling_percentage=1.000000, num_reference_models=26, num_sub_problems=2
-[2021-08-20 11:44:34.036817] [Experiment ID:  1] Configuration: cluster_spec=v100:32|p100:32|k80:32, policy=MaxMinFairness_Packing, seed=2, lam=562.500000, profiling_percentage=1.000000, num_reference_models=26, num_sub_problems=2
-[2021-08-20 11:44:34.042734] [Experiment ID:  2] Configuration: cluster_spec=v100:32|p100:32|k80:32, policy=MaxMinFairness_Packing, seed=0, lam=562.500000, profiling_percentage=1.000000, num_reference_models=26, num_sub_problems=4
-[2021-08-20 11:44:34.046593] [Experiment ID:  2] Configuration: cluster_spec=v100:32|p100:32|k80:32, policy=MaxMinFairness_Packing, seed=1, lam=562.500000, profiling_percentage=1.000000, num_reference_models=26, num_sub_problems=4
-[2021-08-20 11:44:34.049944] [Experiment ID:  2] Configuration: cluster_spec=v100:32|p100:32|k80:32, policy=MaxMinFairness_Packing, seed=2, lam=562.500000, profiling_percentage=1.000000, num_reference_models=26, num_sub_problems=4
-[2021-08-20 11:44:34.054563] [Experiment ID:  3] Configuration: cluster_spec=v100:32|p100:32|k80:32, policy=MaxMinFairness_Packing, seed=0, lam=562.500000, profiling_percentage=1.000000, num_reference_models=26, num_sub_problems=8
-[2021-08-20 11:44:34.059386] [Experiment ID:  3] Configuration: cluster_spec=v100:32|p100:32|k80:32, policy=MaxMinFairness_Packing, seed=1, lam=562.500000, profiling_percentage=1.000000, num_reference_models=26, num_sub_problems=8
-[2021-08-20 11:44:34.064934] [Experiment ID:  3] Configuration: cluster_spec=v100:32|p100:32|k80:32, policy=MaxMinFairness_Packing, seed=2, lam=562.500000, profiling_percentage=1.000000, num_reference_models=26, num_sub_problems=8
+[2021-09-28 17:08:09.342446] Running 4 total experiment(s)...
+[2021-09-28 17:08:09.360697] [Experiment ID:  0] Configuration: cluster_spec=v100:32|p100:32|k80:32, policy=MaxMinFairness_Packing, seed=1, lam=562.500000, profiling_percentage=1.000000, num_reference_models=26, num_sub_problems=1
 ...
 ```
 
-This can take a couple of hours to complete. We suggest using `tmux`.
+This can take about a day to complete. We suggest using `tmux`. This creates a
+collection of logfiles under `/path/to/log/directory` (one for each independent
+case run).
 
 The generated output logfiles can be analyzed using the postprocessing script
 available at `cluster_scheduling/process_logs.py` (the output directory used
 above needs to be provided to this script as a command line argument):
 
 ```bash
-> python process_logs.py -l scheduler/logs/
+> python process_logs.py -l /path/to/log/directory
 V100s	P100s	K80s	Policy			K	Seed	Lambda	Metric	Runtime
-32	32	32	max_min_fairness_perf	8	1	900.0	9.434	0.01
-32	32	32	max_min_fairness_perf	8	2	900.0	15.078	0.011
-32	32	32	max_min_fairness_perf	8	0	900.0	14.013	0.011
-32	32	32	max_min_fairness_perf	1	1	900.0	9.455	0.011
-32	32	32	max_min_fairness_perf	1	2	900.0	15.067	0.012
-32	32	32	max_min_fairness_perf	1	0	900.0	14.034	0.011
+32	32	32	max_min_fairness_packed	2	1	562.5	28.765	0.443
+32	32	32	max_min_fairness_packed	4	1	562.5	27.86	0.185
+32	32	32	max_min_fairness_packed	1	1	562.5	28.871	1.269
+32	32	32	max_min_fairness_packed	8	1	562.5	28.809	0.117
 ```
 
-We have also provided a notebook with code for analyzing this post-processed data. Pipe the `stdout` to a file (e.g., `max_min_fairness_perf.tsv`) and then point `cluster_scheduling/figures.ipynb` at this file.
+We have also provided a notebook with code for analyzing this post-processed data. Pipe the `stdout` to a file (e.g., `max_min_fairness_packed.tsv`) and then point `cluster_scheduling/figures.ipynb` at this file.
 
-
-## Figure 7: Max-Min Fairness Policy with Space Sharing
-
-To reproduce Figure 7 in the paper, run the following command from `cluster_scheduling/scheduler`:
-
-```bash
-python -u scripts/sweeps/run_sweep_continuous.py -s 4000 -e 5000 -l /path/to/log/directory -j 24 -p max_min_fairness_packed --seeds 0 1 2 -c 32:32:32 -a 6.4 -b 6.4 -n 1 --num_sub_problems 1 2 4 8
-```
-
-Running the space-sharing policies is expensive, so this can take a very long time to run (on the order of a day or more).
-
-## Figure 9: Minimize Makespan
+## Figure 8: Minimize Makespan
 
 To reproduce Figure 9 in the paper, run the following command from `cluster_scheduling/scheduler`:
 
 ```bash
-python -u scripts/sweeps/run_sweep_static.py -l /path/to/log/directory -j 24 -p min_total_duration_perf --seeds 0 1 2 -c 32:32:32 -a 700 -b 700 -n 1 --generate-multi-gpu-jobs --num_sub_problems 1 2 4 8
+python -u scripts/sweeps/run_sweep_static.py -l /path/to/log/directory -j 1 -p min_total_duration_perf --seeds 1 -c 32:32:32 -a 700 -b 700 -n 1 --generate-multi-gpu-jobs --num_sub_problems 1 2 4 8 --solver MOSEK
 ```
 
-## Figure 10: Max-Flow Traffic Engineering, Single Network
+## Figure 9: Max-Flow Traffic Engineering, Single Network
 
 To reproduce Figure 10, run the following command from `traffic_engineering/benchmarks`:
 ```bash
@@ -214,7 +201,7 @@ To reproduce Figure 10, run the following command from `traffic_engineering/benc
 
 This will create CSV files containing the results (including throughput and runtime) of POP, NCFlow, and CSPF, as well as the optimal baseline (no partitioning). Further traffic engineering experiments will append to these CSV files.
 
-## Figure 11: Max-Flow Traffic Engineering, (Network x Traffic Matrix)
+## Figure 10: Max-Flow Traffic Engineering, (Network x Traffic Matrix)
 
 To reproduce Figure 11, run the following command from `traffic_engineering/benchmarks`:
 ```bash
