@@ -1,5 +1,5 @@
 V100s	P100s	K80s	Policy			K	Seed	Lambda	Metric	Runtime
+32	32	32	max_min_fairness_packed	1	1	562.5	28.871	1.269
 32	32	32	max_min_fairness_packed	2	1	562.5	28.765	0.443
 32	32	32	max_min_fairness_packed	4	1	562.5	27.86	0.185
-32	32	32	max_min_fairness_packed	1	1	562.5	28.871	1.269
 32	32	32	max_min_fairness_packed	8	1	562.5	28.809	0.117
