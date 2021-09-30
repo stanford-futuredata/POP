@@ -30,9 +30,9 @@ for how to find and launch a public AMI (this assumes you have a valid billable 
 wget https://repo.anaconda.com/miniconda/Miniconda3-py38_4.10.3-Linux-x86_64.sh
 bash Miniconda3-py38_4.10.3-Linux-x86_64.sh
 ```
-3. Download and install CPLEX 12.1 free academic version (requires an IBM account,
+3. Download and install CPLEX 20.1 free academic version (requires an IBM account,
 https://www.ibm.com/academic/technology/data-science). Run the installer,
-specifying `/home/ubuntu/cplex121` as the install directory. 
+specifying `/home/ubuntu/cplex201` as the install directory. 
 4. Download and install [Gurobi 8.1.1](https://packages.gurobi.com/8.1/gurobi8.1.1_linux64.tar.gz):
 ```bash
 wget https://packages.gurobi.com/8.1/gurobi8.1.1_linux64.tar.gz
@@ -60,9 +60,9 @@ Source your `.bashrc` so that these variables are now available.
 wget https://repo.anaconda.com/miniconda/Miniconda3-py38_4.10.3-Linux-x86_64.sh
 bash Miniconda3-py38_4.10.3-Linux-x86_64.sh
 ```
-3. Download and install CPLEX 12.1 free academic version (requires an IBM account,
+3. Download and install CPLEX 20.1 free academic version (requires an IBM account,
 https://www.ibm.com/academic/technology/data-science). Run the installer,
-specifying `/home/ubuntu/cplex121` as the install directory.
+specifying `/home/ubuntu/cplex201` as the install directory.
 4. Download and install [Gurobi 8.1.1](https://packages.gurobi.com/8.1/gurobi8.1.1_linux64.tar.gz):
 ```bash
 wget https://packages.gurobi.com/8.1/gurobi8.1.1_linux64.tar.gz
@@ -162,7 +162,10 @@ form:
 
 The first line is the list of runtimes in the order `[Exact sol., POP-2, POP-4, POP-8, Gandiva]`.
 The second line is the list of dicts of effective throughputs for each of these jobs. For the
-purposes of this figure, the allocation quality is the effective throughput ratio.
+purposes of this figure, the allocation quality is the mean effective throughput ratio (ratio
+of effective throughput of each job with a specific policy to the exact solution's). For each
+point in Figure 2, the `x` value is the runtime, and the `y` value is the mean effective
+throughput (with standard deviation as the error bar).
 
 ## Figure 6: Max-Min Fairness Policy with Space Sharing with Trace
 
@@ -182,10 +185,13 @@ Partial output of this script looks like this:
 ...
 ```
 
-This is a merely driver program, and launches multiple experiments. In this case,
+This is a driver program, and launches multiple experiments. In this case,
 4 experiments are launched: one for each different value of `k`. This can take
 about a day to complete. We suggest using `tmux`. This creates a collection of
-logfiles under `/path/to/log/directory` (one for each experiment).
+logfiles under `/path/to/log/directory` (one for each experiment). Here, we
+use a poisson lambda parameter of 6.4, and measure the completion times of
+all jobs from 1000 to 1499 (inclusive). The trace completes once all 500 of
+these jobs complete.
 
 Each of these logfiles look like this in progress:
 
@@ -228,6 +234,7 @@ The main metrics of interest here are `Mean allocation computation time` and
 `Average job completion time`. The first is the runtime (x-axis of Figure 6),
 and the second is the average JCT (y-axis of Figure 6).
 
+The total size of the output directory from this experiment is about 10 GB.
 The generated output logfiles can be analyzed using the postprocessing script
 available at `cluster_scheduling/process_logs.py` (the output directory used
 above needs to be provided to this script as a command line argument):
@@ -246,13 +253,33 @@ Pipe the `stdout` of the above `process_logs.py` script to a file (e.g.,
 `max_min_fairness_packed.tsv`) and then point `cluster_scheduling/figures.ipynb`
 at this file.
 
+An example processed TSV file is checked in at `cluster_scheduling/logs/max_min_fairness_packed.tsv`.
+
 ## Figure 8: Minimize Makespan
 
-To reproduce Figure 9 in the paper, run the following command from `cluster_scheduling/scheduler`:
+To reproduce Figure 9 in the paper, run the following command from `cluster_scheduling/scheduler`
+(pick a different directory to the previous experiment):
 
 ```bash
 python -u scripts/sweeps/run_sweep_static.py -l /path/to/log/directory -j 1 -p min_total_duration_perf --seeds 1 -c 32:32:32 -a 700 -b 700 -n 1 --generate-multi-gpu-jobs --num_sub_problems 1 2 4 8 --solver MOSEK
 ```
+
+As before, this runs 4 different experiments (one for each different number of sub-problems:
+1, 2, 4, 8); each experiment has its own logfile.
+
+These logfiles can again be analyzed using the postprocessing script with the
+following command line arguments:
+
+```bash
+> python process_logs.py -l scheduler/final_pop_experiments_makespan --static-trace
+V100s	P100s	K80s	Policy			K	Seed	Lambda	Metric	Runtime
+32	32	32	min_total_duration_perf	2	1	700.0	255.98896194444444	0.114
+32	32	32	min_total_duration_perf	4	1	700.0	256.86090194444444	0.113
+32	32	32	min_total_duration_perf	1	1	700.0	255.021445	0.158
+32	32	32	min_total_duration_perf	8	1	700.0	270.6964538888889	0.097
+```
+
+An example processed TSV file is checked in at `cluster_scheduling/logs/min_total_duration_perf.tsv`.
 
 ## Figure 9: Max-Flow Traffic Engineering, Single Network
 
