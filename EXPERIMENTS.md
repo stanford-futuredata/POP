@@ -170,7 +170,7 @@ throughput (with standard deviation as the error bar).
 ## Figure 6: Max-Min Fairness Policy with Space Sharing with Trace
 
 To reproduce Figure 6 in the paper (that is, evaluate the max-min fairness policy presented
-in Section 4.1 of the paper), run the following command from `cluster_scheduling/scheduling`
+in Section 4.1 of the paper), run the following command from `cluster_scheduling/scheduler`
 (fill in the output directory as appropriate, this needs to be created beforehand):
 
 ```bash

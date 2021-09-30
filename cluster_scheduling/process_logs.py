@@ -56,6 +56,18 @@ def average_jct_fn(logfile_path, min_job_id=None, max_job_id=None):
     return round(np.mean(job_completion_times) / 3600, 3)
 
 
+def makespan_fn(logfile_path):
+    job_completion_times = []
+    with open(logfile_path, 'r') as f:
+        lines = f.readlines()
+        for line in lines[-10000:]:
+            m = re.match(r'Total duration: (\d+\.\d+) seconds', line)
+            if m is not None:
+                makespan = float(m.group(1)) / 3600.
+                return makespan
+    return None
+
+
 def runtime_fn(logfile_path):
     runtime = None
     with open(logfile_path, 'r') as f:
@@ -68,17 +80,20 @@ def runtime_fn(logfile_path):
     return runtime
 
 
-def print_all_results_in_directory(logfile_directory):
+def print_all_results_in_directory(logfile_directory, static_trace):
     print("V100s\tP100s\tK80s\tPolicy\t\t\tK\tSeed\tLambda\tMetric\tRuntime")
-    logfile_paths = get_logfile_paths(logfile_directory)
+    logfile_paths = get_logfile_paths(logfile_directory, static_trace=static_trace)
 
     for logfile_path in logfile_paths:
         (v100s, p100s, k80s, policy, num_sub_problems, seed,
          lambda_or_num_total_jobs, logfile_path) = logfile_path
-        average_jct = average_jct_fn(logfile_path)
+        if static_trace:
+            metric = makespan_fn(logfile_path)
+        else:
+            metric = average_jct_fn(logfile_path)
         runtime = runtime_fn(logfile_path)
         results = [v100s, p100s, k80s, policy, num_sub_problems, seed,
-                   lambda_or_num_total_jobs, average_jct, runtime]
+                   lambda_or_num_total_jobs, metric, runtime]
         print("\t".join([str(x) for x in results]))
 
 if __name__ == '__main__':
@@ -86,6 +101,8 @@ if __name__ == '__main__':
     parser.add_argument('-l', "--logfile-directory", type=str,
                         required=True,
                         help='Directory with output logfiles')
+    parser.add_argument("--static-trace", action='store_true',
+                        help='Compute makespan from logfiles (instead of average JCT)')
 
     args = parser.parse_args()
-    print_all_results_in_directory(args.logfile_directory)
+    print_all_results_in_directory(args.logfile_directory, args.static_trace)

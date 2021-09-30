@@ -1,0 +1,5 @@
+V100s	P100s	K80s	Policy			K	Seed	Lambda	Metric	Runtime
+32	32	32	min_total_duration_perf	2	1	700.0	255.98896194444444	0.114
+32	32	32	min_total_duration_perf	4	1	700.0	256.86090194444444	0.113
+32	32	32	min_total_duration_perf	1	1	700.0	255.021445	0.158
+32	32	32	min_total_duration_perf	8	1	700.0	270.6964538888889	0.097
