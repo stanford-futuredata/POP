@@ -270,11 +270,17 @@ python -u scripts/sweeps/run_sweep_static.py -l /path/to/log/directory -j 1 -p m
 As before, this runs 4 different experiments (one for each different number of sub-problems:
 1, 2, 4, 8); each experiment has its own logfile.
 
+Each logfile in `/path/to/log/directory` has the same format as before. However,
+the relevant fields for this figure are `Total duration` (instead of `Average job
+completion time`) and `Mean allocation time`. The `Total duration` is the
+makespan (y-axis of Figure 8).
+
 These logfiles can again be analyzed using the postprocessing script with the
-following command line arguments:
+following command line arguments (note the additional `--static-trace` command
+line argument):
 
 ```bash
-> python process_logs.py -l scheduler/final_pop_experiments_makespan --static-trace
+> python process_logs.py -l /path/to/log/directory --static-trace
 V100s	P100s	K80s	Policy			K	Seed	Lambda	Metric	Runtime
 32	32	32	min_total_duration_perf	2	1	700.0	255.98896194444444	0.114
 32	32	32	min_total_duration_perf	4	1	700.0	256.86090194444444	0.113
