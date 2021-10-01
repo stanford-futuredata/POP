@@ -303,7 +303,7 @@ GtsCe.graphml,149,386,1094617564,bimodal,64.0,22052,35272.441052967064,pop,rando
 GtsCe.graphml,149,386,1692363919,bimodal,16.0,22052,8884.5899661062,pop,random,0,16,4,True,inv-cap,total_flow,8851.996783498733,0.04248499870300293
 GtsCe.graphml,149,386,1044086935,bimodal,8.0,22052,4442.944152193123,pop,random,0,16,4,True,inv-cap,total_flow,4442.944152193149,0.012195110321044922
 ```
-Each line corresponds to a different experiment (network topology, seed, traffic
+Each line corresponds to a different experiment (network topology, random seed, scale factor, traffic
 model). The last two columns are the most relevant: the `obj_val` column reports
 the total flow, and `runtime` reports the runtime of the method (including the
 time to solve the sub-problems when using POP).
@@ -335,7 +335,7 @@ To reproduce Figure 12, run the following command from `traffic_engineering/benc
 ./path_form.py --slices 0 --topos Kdl.graphml --scale-factors 16 --tm-models gravity --obj mcf
 ```
 
-Log format is similar to before. `ob_val` column returns the maximum concurrent
+Log format is similar to before. `obj_val` column returns the maximum concurrent
 flow now.
 
 ## Figure 13: Load balancing
