@@ -1,11 +1,13 @@
 # SOSP 2021 Experiments
 
-This document describes how to run the experiments in the SOSP 2021 paper. These experiments were benchmarked on an `m5.8xlarge` AWS EC2 instance.
+This document describes how to run the experiments in the SOSP 2021 paper. These
+experiments were benchmarked on an `m5.8xlarge` AWS EC2 instance.
 
 ## Setup
 
 We have created an image on Amazon EC2 with all software dependencies already
-installed. Skip to [the next section](#reproducing-experiments) if using this.
+installed on Ubuntu 16.04. Skip to [the next section](#reproducing-experiments)
+if using this.
 
 | Field  | Value |
 | -------------  | ------------- |
@@ -15,7 +17,8 @@ installed. Skip to [the next section](#reproducing-experiments) if using this.
 | AMI Name       | pop |
 
 See [this link](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html)
-for how to find and launch a public AMI (this assumes you have a valid billable AWS account setup).
+for how to find and launch a public AMI (this assumes you have a valid billable AWS
+account setup).
 
 ### Software Dependencies for Ubuntu 16.04
 
@@ -291,7 +294,25 @@ To reproduce Figure 10, run the following command from `traffic_engineering/benc
 ./path_form.py --slices 0 --topos Kdl.graphml --scale-factors 16 --tm-models gravity --obj total_flow
 ```
 
-This will create CSV files containing the results (including throughput and runtime) of POP, NCFlow, and CSPF, as well as the optimal baseline (no partitioning). Further traffic engineering experiments will append to these CSV files.
+Each script produces a logfile that looks like this:
+```
+problem,num_nodes,num_edges,traffic_seed,tm_model,scale_factor,num_commodities,total_demand,algo,split_method,split_fraction,num_subproblems,num_paths,edge_disjoint,dist_metric,objective,obj_val,runtime
+GtsCe.graphml,149,386,1084420326,bimodal,32.0,22052,17597.271824401527,pop,random,0,16,4,True,inv-cap,total_flow,14103.849639815493,0.060671091079711914
+GtsCe.graphml,149,386,1411496438,bimodal,4.0,22052,2223.551835355677,pop,random,0,16,4,True,inv-cap,total_flow,2223.551835355678,0.014044046401977539
+GtsCe.graphml,149,386,1094617564,bimodal,64.0,22052,35272.441052967064,pop,random,0,16,4,True,inv-cap,total_flow,22805.49661807583,0.1319730281829834
+GtsCe.graphml,149,386,1692363919,bimodal,16.0,22052,8884.5899661062,pop,random,0,16,4,True,inv-cap,total_flow,8851.996783498733,0.04248499870300293
+GtsCe.graphml,149,386,1044086935,bimodal,8.0,22052,4442.944152193123,pop,random,0,16,4,True,inv-cap,total_flow,4442.944152193149,0.012195110321044922
+```
+Each line corresponds to a different experiment (network topology, seed, traffic
+model). The last two columns are the most relevant: the `obj_val` column reports
+the total flow, and `runtime` reports the runtime of the method (including the
+time to solve the sub-problems when using POP).
+
+This will create CSV files containing the results (including throughput and
+runtime) of POP, NCFlow, and CSPF, as well as the optimal baseline (no
+partitioning). By default, further traffic engineering experiments will append
+to these CSV files, but this behavior can be changed by moving the resulting
+CSV files to a different path.
 
 ## Figure 10: Max-Flow Traffic Engineering, (Network x Traffic Matrix)
 
@@ -303,6 +324,8 @@ To reproduce Figure 11, run the following command from `traffic_engineering/benc
 ```
 
 This script runs over 300 experiments, and will take a long time to complete.
+Log format is the same as above (but with more lines since this figure shows
+numbers across more experiments).
 
 ## Figure 12: Max Concurrent Flow Traffic Engineering
 
@@ -311,6 +334,9 @@ To reproduce Figure 12, run the following command from `traffic_engineering/benc
 ./pop.py --slices 0 --topos Kdl.graphml --scale-factors 16 --tm-models gravity --split-fractions 0 --num-subproblems 4 16 64 --split-methods random --obj mcf
 ./path_form.py --slices 0 --topos Kdl.graphml --scale-factors 16 --tm-models gravity --obj mcf
 ```
+
+Log format is similar to before. `ob_val` column returns the maximum concurrent
+flow now.
 
 ## Figure 13: Load balancing
 
