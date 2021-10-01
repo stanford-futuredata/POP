@@ -168,7 +168,8 @@ The second line is the list of dicts of effective throughputs for each of these 
 purposes of this figure, the allocation quality is the mean effective throughput ratio (ratio
 of effective throughput of each job with a specific policy to the exact solution's). For each
 point in Figure 2, the `x` value is the runtime, and the `y` value is the mean effective
-throughput (with standard deviation as the error bar).
+throughput (with standard deviation as the error bar). This experiment takes about 30 minutes
+to complete.
 
 An example logfile is available at `cluster_scheduling/logs/non_trace_num_jobs=2048.out`.
 We have also included code to plot this data at `cluster_scheduling/figures.ipynb`
@@ -198,7 +199,7 @@ about a day to complete. We suggest using `tmux`. This creates a collection of
 logfiles under `/path/to/log/directory` (one for each experiment). Here, we
 use a poisson lambda parameter of 6.4, and measure the completion times of
 all jobs from 1000 to 1499 (inclusive). The trace completes once all 500 of
-these jobs complete.
+these jobs complete. The full script takes about 15 hours to run.
 
 Each of these logfiles look like this in progress:
 
@@ -272,7 +273,8 @@ python -u scripts/sweeps/run_sweep_static.py -l /path/to/log/directory -j 1 -p m
 ```
 
 As before, this runs 4 different experiments (one for each different number of sub-problems:
-1, 2, 4, 8); each experiment has its own logfile.
+1, 2, 4, 8); each experiment has its own logfile. The full script takes about
+an hour to complete.
 
 Each logfile in `/path/to/log/directory` has the same format as before. However,
 the relevant fields for this figure are `Total duration` (instead of `Average job
