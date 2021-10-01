@@ -170,6 +170,10 @@ of effective throughput of each job with a specific policy to the exact solution
 point in Figure 2, the `x` value is the runtime, and the `y` value is the mean effective
 throughput (with standard deviation as the error bar).
 
+An example logfile is available at `cluster_scheduling/logs/non_trace_num_jobs=2048.out`.
+We have also included code to plot this data at `cluster_scheduling/figures.ipynb`
+(cell 5).
+
 ## Figure 6: Max-Min Fairness Policy with Space Sharing with Trace
 
 To reproduce Figure 6 in the paper (that is, evaluate the max-min fairness policy presented
