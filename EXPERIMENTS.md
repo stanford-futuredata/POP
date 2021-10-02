@@ -131,7 +131,7 @@ in Section 4.1 of the paper in isolation with 2048 jobs), run the following comm
 `cluster_scheduling`:
 
 ```bash
-conda activate cluster_scheduling # make sure that you're using the correct environment
+conda activate cluster_scheduling # Make sure that you are using the correct environment.
 python figure2.py | tee num_jobs=2048.out
 ```
 
@@ -163,7 +163,7 @@ in Section 4.1 of the paper), run the following command from `cluster_scheduling
 (fill in the output directory as appropriate, this needs to be created beforehand):
 
 ```bash
-# make sure that you're using the cluster_scheduling environment
+# Make sure that you are using the cluster_scheduling environment.
 python -u scripts/sweeps/run_sweep_continuous.py -s 1000 -e 1500 -l /path/to/log/directory -j 1 -p max_min_fairness_packed --seeds 1 -c 32:32:32 -a 6.4 -b 6.4 -n 1 --num_sub_problems 1 2 4 8 --solver MOSEK
 ```
 
@@ -230,7 +230,7 @@ available at `cluster_scheduling/process_logs.py` (the output directory used
 above needs to be provided to this script as a command line argument):
 
 ```bash
-# make sure that you're using the cluster_scheduling environment
+# Make sure that you are using the cluster_scheduling environment.
 > python process_logs.py -l /path/to/log/directory
 V100s	P100s	K80s	Policy			K	Seed	Lambda	Metric	Runtime
 32	32	32	max_min_fairness_packed	2	1	562.5	28.765	0.443
@@ -252,7 +252,7 @@ To reproduce Figure 9 in the paper, run the following command from `cluster_sche
 (pick a different directory to the previous experiment):
 
 ```bash
-# make sure that you're using the cluster_scheduling environment
+# Make sure that you are using the cluster_scheduling environment.
 python -u scripts/sweeps/run_sweep_static.py -l /path/to/log/directory -j 1 -p min_total_duration_perf --seeds 1 -c 32:32:32 -a 700 -b 700 -n 1 --generate-multi-gpu-jobs --num_sub_problems 1 2 4 8 --solver MOSEK
 ```
 
@@ -270,7 +270,7 @@ following command line arguments (note the additional `--static-trace` command
 line argument):
 
 ```bash
-# make sure that you're using the cluster_scheduling environment
+# Make sure that you are using the cluster_scheduling environment.
 > python process_logs.py -l scheduler/final_pop_experiments_makespan --static-trace
 V100s	P100s	K80s	Policy			K	Seed	Lambda	Metric	Runtime
 32	32	32	min_total_duration_perf	2	1	700.0	255.98896194444444	0.114
@@ -285,7 +285,7 @@ An example processed TSV file is checked in at `cluster_scheduling/logs/min_tota
 
 To reproduce Figure 10, run the following command from `traffic_engineering/benchmarks`:
 ```bash
-conda activate traffic_engineering # make sure you're using the correct environment
+conda activate traffic_engineering # Make sure you are using the correct environment.
 ./pop.py --slices 0 --topos Kdl.graphml --scale-factors 16 --tm-models gravity --split-fractions 0 --num-subproblems 4 16 64 --split-methods random --obj total_flow
 ./ncflow.py --slices 0 --topos Kdl.graphml --scale-factors 16 --tm-models gravity --obj total_flow
 ./cspf.py --slices 0 --topos Kdl.graphml --scale-factors 16 --tm-models gravity --obj total_flow
@@ -316,7 +316,7 @@ CSV files to a different path.
 
 To reproduce Figure 11, run the following command from `traffic_engineering/benchmarks`:
 ```bash
-# make sure you're using the traffic_engineering environment
+# Make sure you are using the traffic_engineering environment.
 ./pop.py --slices 0 --tm-models uniform gravity bimodal poisson-high-inter --split-fractions 0 --num-subproblems 16 --split-methods random --obj total_flow
 ./pop.py --slices 0 --tm-models poisson-high-intra --split-fractions 0.75 --num-subproblems 16 --split-methods random --obj total_flow
 ./path_form.py --slices 0 --obj total_flow
@@ -330,7 +330,7 @@ numbers across more experiments).
 
 To reproduce Figure 12, run the following command from `traffic_engineering/benchmarks`:
 ```bash
-# make sure you're using the traffic_engineering environment
+# Make sure you are using the traffic_engineering environment.
 ./pop.py --slices 0 --topos Kdl.graphml --scale-factors 16 --tm-models gravity --split-fractions 0 --num-subproblems 4 16 64 --split-methods random --obj mcf
 ./path_form.py --slices 0 --topos Kdl.graphml --scale-factors 16 --tm-models gravity --obj mcf
 ```
@@ -354,7 +354,7 @@ java -jar target/POP-1.0-SNAPSHOT-fat-tests.jar -numShards 1024 -numServers 128 
 
 To reproduce Figure 14, run the following command from `traffic_engineering/benchmarks`:
 ```bash
-# make sure you're using the traffic_engineering environment
+# Make sure you are using the traffic_engineering environment.
 ./pop.py --slices 0 --tm-models poisson-high-intra --split-fractions 0 0.5 1.0 --num-subproblems 16 --split-methods random --obj total_flow
 ./pop.py --slices 0 --tm-models gravity --split-fractions 0 1.0 --num-subproblems 16 --split-methods random --obj total_flow
 ./path_form.py --slices 0 --tm-models poisson-high-intra gravity --obj total_flow
@@ -366,7 +366,7 @@ This script runs many experiments, and will take a long time to complete.
 
 To reproduce Figure 15, run the following command from `traffic_engineering/benchmarks`:
 ```bash
-# make sure you're using the traffic_engineering environment
+# Make sure you are using the traffic_engineering environment.
 ./pop.py --slices 0 --topos Cogentco.graphml --tm-models gravity --scale-factors 64 --split-fractions 0 --num-subproblems 4 8 16 --split-methods random means skewed --obj total_flow
 ./path_form.py --slices 0 --topos Cogentco.graphml --tm-models gravity --scale-factors 64 --obj total_flow
 ```
