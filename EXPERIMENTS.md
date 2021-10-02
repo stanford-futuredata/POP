@@ -20,14 +20,22 @@ See [this link](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-a
 for how to find and launch a public AMI (this assumes you have a valid billable AWS
 account setup).
 
-### Software Dependencies for Ubuntu 16.04
+### Software Dependencies
 
-1. Install `apt-get` dependencies:
+1. Install system-wide dependencies. You'll need the following for Ubuntu 16.04:
   ```bash
-  sudo add-apt-repository ppa:openjdk-r/ppa
+  # Ubuntu 16.04
+  sudo add-apt-repository ppa:openjdk-r/ppa # add repository to install Java 11
   sudo apt-get update && sudo apt -y upgrade
   sudo apt-get install -y build-essential cmake python-dev python3-dev openjdk-11-jdk maven unzip zip htop g++ gcc libnuma-dev make numactl zlib1g-dev
   ```
+  For Ubuntu 18.04, use the following commands:
+  ```bash
+  # Ubuntu 18.04
+  sudo apt update && sudo apt -y upgrade
+  sudo apt install -y build-essential cmake python-dev python3-dev openjdk-11-jre-headless default-jre maven unzip zip htop g++ gcc libnuma-dev make numactl zlib1g-dev
+  ```
+
 2. Install [Miniconda with Python 3.8](https://repo.anaconda.com/miniconda/Miniconda3-py38_4.10.3-Linux-x86_64.sh):
 ```bash
 wget https://repo.anaconda.com/miniconda/Miniconda3-py38_4.10.3-Linux-x86_64.sh
@@ -36,55 +44,28 @@ bash Miniconda3-py38_4.10.3-Linux-x86_64.sh
 3. Download and install CPLEX 20.1 free academic version (requires an IBM account,
 https://www.ibm.com/academic/technology/data-science). Run the installer,
 specifying `/home/ubuntu/cplex201` as the install directory. 
+
 4. Download and install [Gurobi 8.1.1](https://packages.gurobi.com/8.1/gurobi8.1.1_linux64.tar.gz):
 ```bash
 wget https://packages.gurobi.com/8.1/gurobi8.1.1_linux64.tar.gz
 tar xvf gurobi8.1.1_linux64.tar.gz
 ```
-Add/modify the following environment variables in your `.bashrc`:
+
+5. Add/modify the following environment variables in your `.bashrc`:
+
 ```bash
 export GUROBI_HOME=$HOME/gurobi811/linux64
 export CPLEX_HOME=$HOME/cplex121/cplex
 export LD_LIBRARY_PATH=$CPLEX_HOME/bin/x86-64_linux:$GUROBI_HOME/lib:$LD_LIBRARY_PATH
 export PATH=$GUROBI_HOME/bin:$PATH
 ```
-Source your `.bashrc` so that these variables are now available.
 
-
-### Software Dependencies for Ubuntu 18.04
-
-1. Install `apt` dependencies:
-  ```bash
-  sudo apt update && sudo apt -y upgrade
-  sudo apt install -y openjdk-11-jre-headless default-jre build-essential cmake python-dev python3-dev maven unzip zip htop g++ gcc libnuma-dev make numactl zlib1g-dev
-  ```
-2. Install [Miniconda with Python 3.8](https://repo.anaconda.com/miniconda/Miniconda3-py38_4.10.3-Linux-x86_64.sh):
-```bash
-wget https://repo.anaconda.com/miniconda/Miniconda3-py38_4.10.3-Linux-x86_64.sh
-bash Miniconda3-py38_4.10.3-Linux-x86_64.sh
-```
-3. Download and install CPLEX 20.1 free academic version (requires an IBM account,
-https://www.ibm.com/academic/technology/data-science). Run the installer,
-specifying `/home/ubuntu/cplex201` as the install directory.
-4. Download and install [Gurobi 8.1.1](https://packages.gurobi.com/8.1/gurobi8.1.1_linux64.tar.gz):
-```bash
-wget https://packages.gurobi.com/8.1/gurobi8.1.1_linux64.tar.gz
-tar xvf gurobi8.1.1_linux64.tar.gz
-```
-Add/modify the following environment variables in your `.bashrc`:
-```bash
-export GUROBI_HOME=$HOME/gurobi811/linux64
-export CPLEX_HOME=$HOME/cplex121/cplex
-export LD_LIBRARY_PATH=$CPLEX_HOME/bin/x86-64_linux:$GUROBI_HOME/lib:$LD_LIBRARY_PATH
-export PATH=$GUROBI_HOME/bin:$PATH
-```
 Source your `.bashrc` so that these variables are now available.
 
 #### Cluster Scheduling
-
 ```bash
 cd POP/cluster_scheduling
-conda create --name pop
+conda create --name cluster_scheduling
 pip install -r requirements.txt
 cd scheduler; make
 ```
@@ -99,7 +80,6 @@ pip install -r requirements.txt
 ```
 
 #### Load Balancing
-
 ```bash
 cd POP/load_balancing
 mvn package
@@ -151,6 +131,7 @@ in Section 4.1 of the paper in isolation with 2048 jobs), run the following comm
 `cluster_scheduling`:
 
 ```bash
+conda activate cluster_scheduling # make sure that you're using the correct environment
 python figure2.py | tee num_jobs=2048.out
 ```
 
@@ -182,6 +163,7 @@ in Section 4.1 of the paper), run the following command from `cluster_scheduling
 (fill in the output directory as appropriate, this needs to be created beforehand):
 
 ```bash
+# make sure that you're using the cluster_scheduling environment
 python -u scripts/sweeps/run_sweep_continuous.py -s 1000 -e 1500 -l /path/to/log/directory -j 1 -p max_min_fairness_packed --seeds 1 -c 32:32:32 -a 6.4 -b 6.4 -n 1 --num_sub_problems 1 2 4 8 --solver MOSEK
 ```
 
@@ -248,6 +230,7 @@ available at `cluster_scheduling/process_logs.py` (the output directory used
 above needs to be provided to this script as a command line argument):
 
 ```bash
+# make sure that you're using the cluster_scheduling environment
 > python process_logs.py -l /path/to/log/directory
 V100s	P100s	K80s	Policy			K	Seed	Lambda	Metric	Runtime
 32	32	32	max_min_fairness_packed	2	1	562.5	28.765	0.443
@@ -269,6 +252,7 @@ To reproduce Figure 9 in the paper, run the following command from `cluster_sche
 (pick a different directory to the previous experiment):
 
 ```bash
+# make sure that you're using the cluster_scheduling environment
 python -u scripts/sweeps/run_sweep_static.py -l /path/to/log/directory -j 1 -p min_total_duration_perf --seeds 1 -c 32:32:32 -a 700 -b 700 -n 1 --generate-multi-gpu-jobs --num_sub_problems 1 2 4 8 --solver MOSEK
 ```
 
@@ -286,7 +270,8 @@ following command line arguments (note the additional `--static-trace` command
 line argument):
 
 ```bash
-> python process_logs.py -l /path/to/log/directory --static-trace
+# make sure that you're using the cluster_scheduling environment
+> python process_logs.py -l scheduler/final_pop_experiments_makespan --static-trace
 V100s	P100s	K80s	Policy			K	Seed	Lambda	Metric	Runtime
 32	32	32	min_total_duration_perf	2	1	700.0	255.98896194444444	0.114
 32	32	32	min_total_duration_perf	4	1	700.0	256.86090194444444	0.113
@@ -300,6 +285,7 @@ An example processed TSV file is checked in at `cluster_scheduling/logs/min_tota
 
 To reproduce Figure 10, run the following command from `traffic_engineering/benchmarks`:
 ```bash
+conda activate traffic_engineering # make sure you're using the correct environment
 ./pop.py --slices 0 --topos Kdl.graphml --scale-factors 16 --tm-models gravity --split-fractions 0 --num-subproblems 4 16 64 --split-methods random --obj total_flow
 ./ncflow.py --slices 0 --topos Kdl.graphml --scale-factors 16 --tm-models gravity --obj total_flow
 ./cspf.py --slices 0 --topos Kdl.graphml --scale-factors 16 --tm-models gravity --obj total_flow
@@ -330,6 +316,7 @@ CSV files to a different path.
 
 To reproduce Figure 11, run the following command from `traffic_engineering/benchmarks`:
 ```bash
+# make sure you're using the traffic_engineering environment
 ./pop.py --slices 0 --tm-models uniform gravity bimodal poisson-high-inter --split-fractions 0 --num-subproblems 16 --split-methods random --obj total_flow
 ./pop.py --slices 0 --tm-models poisson-high-intra --split-fractions 0.75 --num-subproblems 16 --split-methods random --obj total_flow
 ./path_form.py --slices 0 --obj total_flow
@@ -343,6 +330,7 @@ numbers across more experiments).
 
 To reproduce Figure 12, run the following command from `traffic_engineering/benchmarks`:
 ```bash
+# make sure you're using the traffic_engineering environment
 ./pop.py --slices 0 --topos Kdl.graphml --scale-factors 16 --tm-models gravity --split-fractions 0 --num-subproblems 4 16 64 --split-methods random --obj mcf
 ./path_form.py --slices 0 --topos Kdl.graphml --scale-factors 16 --tm-models gravity --obj mcf
 ```
@@ -366,6 +354,7 @@ java -jar target/POP-1.0-SNAPSHOT-fat-tests.jar -numShards 1024 -numServers 128 
 
 To reproduce Figure 14, run the following command from `traffic_engineering/benchmarks`:
 ```bash
+# make sure you're using the traffic_engineering environment
 ./pop.py --slices 0 --tm-models poisson-high-intra --split-fractions 0 0.5 1.0 --num-subproblems 16 --split-methods random --obj total_flow
 ./pop.py --slices 0 --tm-models gravity --split-fractions 0 1.0 --num-subproblems 16 --split-methods random --obj total_flow
 ./path_form.py --slices 0 --tm-models poisson-high-intra gravity --obj total_flow
@@ -377,6 +366,7 @@ This script runs many experiments, and will take a long time to complete.
 
 To reproduce Figure 15, run the following command from `traffic_engineering/benchmarks`:
 ```bash
+# make sure you're using the traffic_engineering environment
 ./pop.py --slices 0 --topos Cogentco.graphml --tm-models gravity --scale-factors 64 --split-fractions 0 --num-subproblems 4 8 16 --split-methods random means skewed --obj total_flow
 ./path_form.py --slices 0 --topos Cogentco.graphml --tm-models gravity --scale-factors 64 --obj total_flow
 ```

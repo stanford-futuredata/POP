@@ -3,6 +3,7 @@
 set -e
 set -x
 
+conda activate traffic_engineering
 ./pop.py --slices 0 \
     --topos Cogentco.graphml \
     --tm-models gravity \

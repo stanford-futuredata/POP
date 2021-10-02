@@ -3,6 +3,7 @@
 set -e
 set -x
 
+conda activate traffic_engineering
 ./pop.py --slices 0 \
     --tm-models poisson-high-intra \
     --split-fractions 0 0.5 1.0 \
