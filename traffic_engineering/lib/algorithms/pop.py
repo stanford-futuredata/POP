@@ -15,7 +15,6 @@ from .abstract_formulation import Objective
 from .path_formulation import PathFormulation
 from gurobipy import GRB, Model, quicksum
 from collections import defaultdict
-from pathos import multiprocessing
 import numpy as np
 import math
 import random
@@ -180,16 +179,9 @@ class POP(PathFormulation):
             for subproblem in self._subproblem_list
         ]
         self._paths_dict = self.get_paths(problem)
-        if self.DEBUG:
-            for pf, subproblem in zip(self._pfs, self._subproblem_list):
-                pf._paths_dict = self._paths_dict
-                pf.solve(subproblem)
-        else:
-            pool = multiprocessing.ProcessPool(NUM_CORES)
-            results = pool.map(self.solve_subproblem, range(self._num_subproblems))
-            for (runtime, sol_dict), pf in zip(results, self._pfs):
-                pf._runtime = runtime
-                pf._sol_dict = sol_dict
+        for pf, subproblem in zip(self._pfs, self._subproblem_list):
+            pf._paths_dict = self._paths_dict
+            pf.solve(subproblem)
 
     @property
     def sol_dict(self):
